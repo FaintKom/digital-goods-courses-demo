@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Курсы по продаже цифровых товаров — концепция</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#171a21; --card2:#1d212b; --line:#2a2f3a;
+    --txt:#e8eaed; --muted:#9aa3b2; --accent:#ff7a18; --accent2:#3b82f6; --ok:#34d399;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font:16px/1.55 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:980px;margin:0 auto;padding:0 16px}
+
+  header{position:sticky;top:0;background:rgba(15,17,21,.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);z-index:10}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-weight:800;font-size:18px}
+  .logo b{color:var(--accent)}
+  .btn{background:var(--accent);color:#111;font-weight:700;padding:10px 18px;border-radius:8px;
+    font-size:14px;display:inline-block;transition:.15s}
+  .btn:hover{filter:brightness(1.08)}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+
+  .hero{padding:70px 0 50px;text-align:center}
+  .hero h1{font-size:38px;line-height:1.15;margin:0 0 16px}
+  .hero h1 span{color:var(--accent)}
+  .hero p{color:var(--muted);font-size:18px;max-width:620px;margin:0 auto 28px}
+  .hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .demo-note{margin-top:18px;color:var(--muted);font-size:13px}
+
+  h2{font-size:24px;margin:54px 0 6px;text-align:center}
+  .sub{color:var(--muted);text-align:center;margin:0 0 26px}
+
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:14px;margin-bottom:8px}
+  .flow span{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:6px 13px}
+  .flow .arr{background:none;border:none;color:var(--accent);padding:0}
+
+  .lvl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
+  .lvl-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
+  .tag{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+  .t-free{background:rgba(52,211,153,.15);color:var(--ok)}
+  .t-core{background:rgba(255,122,24,.15);color:var(--accent)}
+  .t-seg{background:rgba(59,130,246,.15);color:var(--accent2)}
+  .lvl h3{margin:8px 0 2px;font-size:20px}
+  .goal{color:var(--muted);font-size:14px;margin:0}
+  ol.mods{margin:12px 0 0;padding-left:0;counter-reset:m;list-style:none}
+  ol.mods li{counter-increment:m;position:relative;padding:10px 0 10px 42px;border-top:1px solid var(--line)}
+  ol.mods li:first-child{border-top:none}
+  ol.mods li::before{content:counter(m);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:8px;
+    background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;color:var(--accent)}
+  .mtitle{font-weight:600}
+  .mnote{color:var(--muted);font-size:14px;display:block;margin-top:2px}
+  .seg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
+  .seg{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .seg b{display:block;margin-bottom:4px}
+  .seg span{color:var(--muted);font-size:13px}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .box h4{margin:0 0 10px;font-size:15px}
+  .box ul{margin:0;padding-left:18px;color:var(--muted)}
+  .box li{margin:6px 0}
+
+  .cta-band{background:linear-gradient(135deg,#1d212b,#171a21);border:1px solid var(--line);
+    border-radius:16px;padding:36px;text-align:center;margin:54px 0}
+  .cta-band h2{margin:0 0 10px}
+  .cta-band p{color:var(--muted);margin:0 0 22px}
+
+  footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px;text-align:center;padding:24px 0;margin-top:40px}
+  @media(max-width:680px){.two{grid-template-columns:1fr}.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">Цифровые товары<b>·</b>Курсы</div>
+    <a class="btn" href="course.html">Открыть демо-урок →</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>Курсы, которые приводят<br><span>учеников на вашу платформу</span></h1>
+    <p>Линейка обучения по продаже цифровых товаров: от первой сделки до международного бизнеса.
+       Каждый шаг ученика — это активация на платформе.</p>
+    <div class="cta">
+      <a class="btn" href="course.html">Посмотреть демо-урок</a>
+      <a class="btn btn-ghost" href="#structure">Структура курсов</a>
+    </div>
+    <p class="demo-note">Это демонстрационная концепция. Контент уроков — черновой, для показа формата.</p>
+  </section>
+
+  <h2 id="structure">Путь ученика</h2>
+  <p class="sub">От нуля до масштаба — обучение встроено в реальные действия на платформе</p>
+  <div class="flow">
+    <span>Узнал рынок</span><span class="arr">→</span>
+    <span>Первая продажа</span><span class="arr">→</span>
+    <span>Витрина</span><span class="arr">→</span>
+    <span>Автоматизация</span><span class="arr">→</span>
+    <span>Юнит-экономика</span><span class="arr">→</span>
+    <span>Легализация</span><span class="arr">→</span>
+    <span>Масштаб</span>
+  </div>
+
+  <!-- LEVEL 0 -->
+  <div class="lvl">
+    <div class="lvl-head">
+      <span class="tag t-free">Бесплатно · воронка</span>
+      <span class="goal">5–7 уроков · 8–10 мин · дрип в Telegram/email</span>
+    </div>
+    <h3>Лид-магнит: «Рынок цифровых товаров»</h3>
+    <p class="goal">Цель — регистрация на платформе и ранний успех: первая микро-сделка уже в демо.</p>
+    <ol class="mods">
+      <li><span class="mtitle">Что за рынок и сколько на нём зарабатывают</span><span class="mnote">коды, гифт-карты, топапы — кто и зачем покупает</span></li>
+      <li><span class="mtitle">3 модели продаж</span><span class="mnote">маркетплейс, Telegram-бот, свой сайт</span></li>
+      <li><span class="mtitle">Откуда брать товар оптом</span><span class="mnote">обзор поставщика, маржа и кэшбэк</span></li>
+      <li><span class="mtitle">Первая сделка на пальцах</span><span class="mnote">купил дешевле — продал дороже</span></li>
+      <li><span class="mtitle">Что дальше</span><span class="mnote">переход на основной курс</span></li>
+    </ol>
+  </div>
+
+  <!-- LEVEL 1 -->
+  <div class="lvl">
+    <div class="lvl-head">
+      <span class="tag t-core">Основной курс</span>
+      <span class="goal">7 модулей · ~25–30 уроков · видео + конспекты + практика</span>
+    </div>
+    <h3>«Запуск магазина цифровых товаров за 14 дней»</h3>
+    <p class="goal">Цель — довести до первого заказа через платформу и подвести к легализации бизнеса.</p>
+    <ol class="mods">
+      <li><span class="mtitle">Рынок и модели продаж</span><span class="mnote">выбор ниши и канала под себя</span></li>
+      <li><span class="mtitle">Первая продажа руками</span><span class="mnote">без кода, через панель платформы</span></li>
+      <li><span class="mtitle">Витрина и каналы</span><span class="mnote">Telegram-бот, сайт, размещение на площадках</span></li>
+      <li><span class="mtitle">Автоматизация без кода</span><span class="mnote">готовый бот-шаблон, no-code или ТЗ для фрилансера</span></li>
+      <li><span class="mtitle">Юнит-экономика</span><span class="mnote">маржа, уровни кэшбэка, валютные риски</span></li>
+      <li><span class="mtitle">Легализация бизнеса</span><span class="mnote">когда оформляться, выбор юрисдикции, счёт</span></li>
+      <li><span class="mtitle">Команда и масштаб</span><span class="mnote">саппорт, автоматизация, делегирование</span></li>
+    </ol>
+  </div>
+
+  <!-- LEVEL 2 -->
+  <div class="lvl">
+    <div class="lvl-head">
+      <span class="tag t-seg">Мини-курсы · допродажи</span>
+      <span class="goal">короткие, под конкретный сегмент</span>
+    </div>
+    <h3>Сегментные мини-курсы</h3>
+    <div class="seg-grid">
+      <div class="seg"><b>Telegram-магазин под ключ</b><span>бот + приём оплат + автовыдача, без кода</span></div>
+      <div class="seg"><b>Международная компания для цифрового бизнеса</b><span>юрисдикции, счета, налоги</span></div>
+    </div>
+  </div>
+
+  <h2>Форматы</h2>
+  <p class="sub">Не лекции — практика, после которой у ученика работающий магазин</p>
+  <div class="two">
+    <div class="box">
+      <h4>Контент</h4>
+      <ul>
+        <li>Видео 7–12 мин: скринкаст + спикер</li>
+        <li>Текстовый конспект к каждому уроку</li>
+        <li>Практика с чекпоинтами внутри платформы</li>
+        <li>Дрип-версия лид-магнита в Telegram/email</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h4>Шаблоны</h4>
+      <ul>
+        <li>Калькулятор юнит-экономики</li>
+        <li>Чек-лист выбора юрисдикции</li>
+        <li>Шаблон Telegram-бота</li>
+        <li>Чек-лист запуска за 14 дней</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h2>Посмотрите, как выглядит урок</h2>
+    <p>Демо одного урока основного курса — формат, навигация, практика.</p>
+    <a class="btn" href="course.html">Открыть демо-урок →</a>
+  </div>
+
+</div>
+
+<footer>
+  Демонстрационная концепция курсов · подготовлено для обсуждения
+</footer>
+
+</body>
+</html>

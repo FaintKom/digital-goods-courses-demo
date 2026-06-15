@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Демо-урок · Запуск магазина цифровых товаров</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#141821; --card:#171a21; --card2:#1d212b; --line:#2a2f3a;
+    --txt:#e8eaed; --muted:#9aa3b2; --accent:#ff7a18; --ok:#34d399;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font:16px/1.6 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+
+  /* top bar */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    height:58px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:20}
+  .top .back{color:var(--muted);font-size:14px}
+  .top .ttl{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prog{display:flex;align-items:center;gap:10px;min-width:180px}
+  .prog .bar{flex:1;height:7px;background:var(--card2);border-radius:5px;overflow:hidden}
+  .prog .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s}
+  .prog .pct{font-size:13px;color:var(--muted);min-width:34px;text-align:right}
+
+  /* layout */
+  .layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 58px)}
+  .side{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;max-height:calc(100vh - 58px);position:sticky;top:58px}
+  .mod{border-bottom:1px solid var(--line)}
+  .mod>.mhead{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
+  .mod>.mhead:hover{background:var(--card)}
+  .mod .mnum{width:24px;height:24px;border-radius:6px;background:var(--card2);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0}
+  .mod .mttl{font-size:14px;font-weight:600;flex:1}
+  .mod .chev{color:var(--muted);font-size:12px;transition:.2s}
+  .mod.open .chev{transform:rotate(90deg)}
+  .lessons{display:none;padding:0 0 8px}
+  .mod.open .lessons{display:block}
+  .lesson{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 50px;cursor:pointer;font-size:13.5px;color:var(--muted)}
+  .lesson:hover{background:var(--card);color:var(--txt)}
+  .lesson.active{background:var(--card2);color:var(--txt);box-shadow:inset 3px 0 0 var(--accent)}
+  .lesson .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:11px}
+  .lesson.done .dot{background:var(--ok);border-color:var(--ok);color:#0b1f17}
+  .lesson .lock{margin-left:auto;font-size:11px;opacity:.6}
+
+  /* main */
+  .main{padding:34px 40px 80px;max-width:820px}
+  .crumbs{color:var(--muted);font-size:13px;margin-bottom:10px}
+  .main h1{font-size:26px;margin:0 0 18px}
+  .video{aspect-ratio:16/9;background:linear-gradient(135deg,#1d212b,#10131a);border:1px solid var(--line);
+    border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-bottom:26px}
+  .play{width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center}
+  .play:after{content:"";border-left:20px solid #111;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+  .video span{color:var(--muted);font-size:13px}
+  .body h2{font-size:19px;margin:26px 0 10px}
+  .body p{margin:0 0 14px}
+  .body ul{margin:0 0 14px;padding-left:20px}
+  .body li{margin:6px 0}
+  .task{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:12px;padding:18px 20px;margin:24px 0}
+  .task h3{margin:0 0 8px;font-size:16px;color:var(--accent)}
+  .task p{margin:0 0 8px;color:var(--muted)}
+  .placeholder{background:var(--card);border:1px dashed var(--line);border-radius:12px;
+    padding:40px;text-align:center;color:var(--muted)}
+
+  .navbtns{display:flex;justify-content:space-between;gap:12px;margin-top:34px;flex-wrap:wrap}
+  .btn{border:none;cursor:pointer;font:inherit;font-weight:700;padding:12px 20px;border-radius:9px}
+  .btn-done{background:var(--ok);color:#0b1f17}
+  .btn-done.is-done{background:var(--card2);color:var(--muted);cursor:default}
+  .btn-next{background:var(--accent);color:#111}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+
+  .menu-toggle{display:none}
+  @media(max-width:860px){
+    .layout{grid-template-columns:1fr}
+    .side{position:fixed;left:0;top:58px;bottom:0;width:300px;z-index:30;transform:translateX(-100%);transition:.25s}
+    .side.show{transform:none}
+    .menu-toggle{display:inline-block;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+      border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
+    .main{padding:24px 18px 70px}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div style="display:flex;align-items:center;gap:12px;min-width:0">
+    <button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('show')">☰ Уроки</button>
+    <a class="back" href="index.html">← К программе</a>
+    <span class="ttl">Запуск магазина цифровых товаров за 14 дней</span>
+  </div>
+  <div class="prog">
+    <div class="bar"><i id="progFill"></i></div>
+    <span class="pct" id="progPct">0%</span>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="side" id="side"></aside>
+  <main class="main">
+    <div class="crumbs" id="crumbs"></div>
+    <h1 id="lessonTitle"></h1>
+    <div class="video"><div class="play"></div><span>Демо · здесь будет видео урока</span></div>
+    <div class="body" id="lessonBody"></div>
+    <div class="navbtns">
+      <button class="btn btn-done" id="doneBtn" onclick="markDone()">Отметить пройденным</button>
+      <button class="btn btn-next" id="nextBtn" onclick="goNext()">Следующий урок →</button>
+    </div>
+  </main>
+</div>
+
+<script>
+// ponytail: in-memory demo state, no backend. Resets on reload — fine for a demo.
+const MODULES = [
+  { t:"Рынок и модели продаж", lessons:[
+      {t:"Что продаём и кто покупает", full:true},
+      {t:"3 модели: маркетплейс, бот, сайт"},
+      {t:"Выбор ниши под себя"} ]},
+  { t:"Первая продажа руками", lessons:[
+      {t:"Регистрация и пополнение баланса", full:true},
+      {t:"Первая сделка через панель"},
+      {t:"Выдача товара покупателю"} ]},
+  { t:"Витрина и каналы", lessons:[
+      {t:"Telegram-бот за вечер"},
+      {t:"Простой сайт-витрина"},
+      {t:"Размещение на площадках"} ]},
+  { t:"Автоматизация без кода", lessons:[
+      {t:"Готовый бот-шаблон"},
+      {t:"No-code связки"},
+      {t:"ТЗ для фрилансера"} ]},
+  { t:"Юнит-экономика", lessons:[
+      {t:"Маржа и уровни кэшбэка"},
+      {t:"Валютные риски"} ]},
+  { t:"Легализация бизнеса", lessons:[
+      {t:"Когда оформляться — а когда рано"},
+      {t:"Выбор юрисдикции"},
+      {t:"Открытие счёта"} ]},
+  { t:"Команда и масштаб", lessons:[
+      {t:"Саппорт и автоответы"},
+      {t:"Делегирование"} ]},
+];
+
+// real demo content for the "full" lessons, keyed "modIdx.lesIdx"
+const CONTENT = {
+  "0.0":`
+    <p>Цифровые товары — это всё, что доставляется кодом, а не курьером: ключи активации игр,
+       подарочные карты (Steam, PlayStation, Apple), пополнения внутриигровых валют, подписки, eSIM.
+       Покупатель получает товар мгновенно, у продавца нет склада и логистики.</p>
+    <h2>Почему на этом зарабатывают</h2>
+    <ul>
+      <li><b>Нет склада и доставки</b> — товар цифровой, выдаётся автоматически.</li>
+      <li><b>Опт дешевле розницы</b> — берёте по оптовой цене, продаёте по рыночной, разница ваша.</li>
+      <li><b>Спрос круглый год</b> — игры, подписки и пополнения покупают постоянно.</li>
+    </ul>
+    <h2>Как устроен заработок</h2>
+    <p>Схема простая: оптовый поставщик даёт товар ниже рынка → вы ставите свою цену →
+       маржа остаётся вам. На обороте добавляется кэшбэк-уровень поставщика, и маржа растёт.</p>
+    <div class="task">
+      <h3>Практика урока</h3>
+      <p>1. Зарегистрируйтесь на платформе-поставщике (ссылка в материалах урока).</p>
+      <p>2. Найдите в каталоге 3 товара и сравните оптовую цену с ценой на маркетплейсе.</p>
+      <p>3. Посчитайте маржу по каждому. Запишите самый выгодный.</p>
+    </div>
+    <p>Это и есть ваш первый шаг: вы уже видите реальную разницу в цене — на ней и строится бизнес.</p>`,
+  "1.0":`
+    <p>В этом уроке делаем первый реальный шаг внутри платформы: создаём аккаунт и пополняем баланс,
+       с которого будут оплачиваться товары.</p>
+    <h2>Шаги</h2>
+    <ul>
+      <li>Создайте аккаунт и подтвердите почту.</li>
+      <li>Откройте раздел «Баланс» и пополните на минимальную сумму для теста.</li>
+      <li>Проверьте, что средства зачислились и доступны для заказа.</li>
+    </ul>
+    <p>Минимальное пополнение нужно, чтобы пройти весь путь до выдачи товара на живом примере,
+       не вкладывая много.</p>
+    <div class="task">
+      <h3>Практика урока</h3>
+      <p>1. Пополните баланс на тестовую сумму.</p>
+      <p>2. Сделайте скриншот зачисления — это подтверждение шага.</p>
+    </div>`,
+};
+
+let cur = {m:0, l:0};
+const done = new Set();
+let total = 0;
+MODULES.forEach(m=>total+=m.lessons.length);
+
+function key(m,l){return m+"."+l}
+
+function renderSide(){
+  const side=document.getElementById('side');
+  side.innerHTML='';
+  MODULES.forEach((mod,mi)=>{
+    const open = mi===cur.m;
+    const md=document.createElement('div');
+    md.className='mod'+(open?' open':'');
+    md.innerHTML=`<div class="mhead"><span class="mnum">${mi+1}</span>
+        <span class="mttl">${mod.t}</span><span class="chev">▶</span></div>
+      <div class="lessons"></div>`;
+    md.querySelector('.mhead').onclick=()=>{md.classList.toggle('open')};
+    const lc=md.querySelector('.lessons');
+    mod.lessons.forEach((les,li)=>{
+      const k=key(mi,li);
+      const isDone=done.has(k);
+      const active=(mi===cur.m&&li===cur.l);
+      const el=document.createElement('div');
+      el.className='lesson'+(active?' active':'')+(isDone?' done':'');
+      el.innerHTML=`<span class="dot">${isDone?'✓':''}</span><span>${les.t}</span>`+
+        (les.full?'':'<span class="lock">демо</span>');
+      el.onclick=()=>{cur={m:mi,l:li};renderSide();renderLesson();
+        document.querySelector('.side').classList.remove('show')};
+      lc.appendChild(el);
+    });
+    side.appendChild(md);
+  });
+}
+
+function renderLesson(){
+  const mod=MODULES[cur.m], les=mod.lessons[cur.l];
+  document.getElementById('crumbs').textContent=`Модуль ${cur.m+1} · ${mod.t}`;
+  document.getElementById('lessonTitle').textContent=les.t;
+  const body=document.getElementById('lessonBody');
+  const c=CONTENT[key(cur.m,cur.l)];
+  body.innerHTML = c || `<div class="placeholder">
+      Это демонстрационная версия. Полный конспект и задания этого урока
+      готовятся в рамках разработки курса.<br><br>
+      Откройте уроки без пометки <b>«демо»</b> — там показан реальный формат.</div>`;
+  const db=document.getElementById('doneBtn');
+  if(done.has(key(cur.m,cur.l))){db.textContent='Пройдено ✓';db.classList.add('is-done')}
+  else{db.textContent='Отметить пройденным';db.classList.remove('is-done')}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function markDone(){
+  done.add(key(cur.m,cur.l));
+  updateProg();renderSide();renderLesson();
+}
+
+function updateProg(){
+  const pct=Math.round(done.size/total*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+}
+
+function goNext(){
+  let {m,l}=cur;
+  if(l+1<MODULES[m].lessons.length) l++;
+  else if(m+1<MODULES.length){m++;l=0}
+  else return;
+  cur={m,l};renderSide();renderLesson();
+}
+
+renderSide();renderLesson();updateProg();
+</script>
+</body>
+</html>
