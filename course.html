@@ -151,6 +151,83 @@
     .menu-toggle{display:inline-block;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
     .main{padding:24px 18px 70px}.pgrid{grid-template-columns:1fr}
   }
+
+  /* ===== UX polish: motion, feedback, focus ===== */
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    @keyframes msgIn{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+    @keyframes pop{0%{transform:scale(.92);opacity:0}60%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
+    @keyframes shake{10%,90%{transform:translateX(-1px)}30%,70%{transform:translateX(3px)}50%{transform:translateX(-4px)}}
+    @keyframes pulseOk{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}100%{box-shadow:0 0 0 10px rgba(52,211,153,0)}}
+    @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+    @keyframes flash{0%{color:var(--accent)}100%{color:var(--ok)}}
+  }
+  .fade{animation:fadeUp .3s ease both}
+  ::selection{background:rgba(255,122,24,.3)}
+  html{scroll-behavior:smooth}
+
+  /* universal interactive feedback */
+  .btn,.opt,.chip,.pbtn,.dlbtn,.pcard,.vcard,.lesson,.mhead,.rec{transition:transform .12s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease}
+  .btn:active,.pbtn:active,.dlbtn:active{transform:translateY(1px) scale(.99)}
+  .btn-next:hover{filter:brightness(1.07);box-shadow:0 6px 18px -6px rgba(255,122,24,.6)}
+  .btn-done:not(.is-done):hover{filter:brightness(1.06)}
+  .opt:active{transform:scale(.995)}
+  .opt.correct{animation:pulseOk .6s ease}
+  .opt.wrong{animation:shake .4s ease}
+  .pcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px -12px rgba(0,0,0,.7)}
+  .pcard:active{transform:translateY(-1px)}
+  .vcard:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .vcard:hover .play{filter:brightness(1.1);box-shadow:0 0 0 6px rgba(255,122,24,.15)}
+  .vcard .play{transition:.15s}
+  .rec{cursor:pointer;border-radius:6px;padding-left:6px}
+  .rec:hover{color:var(--txt);background:var(--card2)}
+  .dlbtn:hover{background:var(--accent);color:#111;border-color:var(--accent)}
+  .lesson:active{transform:translateX(1px)}
+  .chip:active{transform:scale(.95)}
+
+  /* focus-visible accessibility rings */
+  a:focus-visible,button:focus-visible,input:focus-visible,.opt:focus-visible,.pcard:focus-visible{
+    outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+  .tg .compose input:focus{outline:none;border-color:#5288c1;box-shadow:0 0 0 3px rgba(82,136,193,.25)}
+  .calc input:focus,.pnl input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,122,24,.18)}
+
+  /* messages + typing indicator */
+  .msg{animation:msgIn .22s ease both}
+  .typing{display:inline-flex;gap:4px;align-items:center;padding:10px 14px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#7fb3e8;display:inline-block;animation:blink 1.2s infinite}
+  .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+  .tg .compose button{transition:.12s}.tg .compose button:hover{filter:brightness(1.15)}
+  .tg .compose button:active{transform:scale(.92)}
+  .tg .compose input:disabled{opacity:.5}
+
+  /* range sliders */
+  input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:5px;
+    background:linear-gradient(var(--accent),var(--accent)) no-repeat,var(--card2);background-size:50% 100%;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--accent);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.5);transition:transform .1s}
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
+  #ex_out,#c_out{transition:color .2s}.flash{animation:flash .4s ease}
+
+  /* panel step success */
+  .psuccess{animation:pop .4s ease both}
+  .pbtn:hover{filter:brightness(1.07);box-shadow:0 6px 18px -8px rgba(255,122,24,.7)}
+  .pstepbar{display:flex;gap:6px;margin-bottom:14px}
+  .pstepbar i{flex:1;height:4px;border-radius:3px;background:var(--card);transition:background .3s}
+  .pstepbar i.on{background:var(--accent)}
+
+  /* toast */
+  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:var(--ok);color:#0b1f17;font-weight:700;padding:12px 20px;border-radius:10px;
+    box-shadow:0 10px 30px -8px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.3s;z-index:50;font-size:14px}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* progress bar sheen */
+  .prog .bar i{position:relative}
+  .prog .bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+    transform:translateX(-100%)}
+  .prog .bar i.bump::after{animation:sheen .7s ease}
+  @keyframes sheen{to{transform:translateX(100%)}}
 </style>
 </head>
 <body>
@@ -180,6 +257,8 @@
     </div>
   </main>
 </div>
+
+<div id="toast"></div>
 
 <script>
 // ponytail: in-memory demo. Real: theory+проверки in H5P, интерактивы = custom HTML/JS sims as SCORM in Moodle.
@@ -378,6 +457,7 @@ function renderLesson(){
         готовятся в рамках разработки курса.<br><br>Откройте уроки <b>📖/🧩/🎥</b> в первых модулях — там реальный формат.</div>`;
     }
   }
+  body.classList.remove('fade'); void body.offsetWidth; body.classList.add('fade');
   const db=document.getElementById('doneBtn');
   if(done.has(key(cur.m,cur.l))){db.textContent='Пройдено ✓';db.classList.add('is-done')}
   else{db.textContent='Отметить пройденным';db.classList.remove('is-done')}
@@ -420,7 +500,8 @@ function exampleRun(){
   const marg=Math.max(s-b,0), tot=Math.max(s,1);
   document.getElementById('ex_cost').style.width=(Math.min(b,s)/tot*100)+'%';
   document.getElementById('ex_marg').style.width=(marg/tot*100)+'%';
-  document.getElementById('ex_out').textContent=marg+' ₽';
+  const o=document.getElementById('ex_out'); o.textContent=marg+' ₽';
+  o.classList.remove('flash'); void o.offsetWidth; o.classList.add('flash');
 }
 
 /* интерактивный пример: калькулятор */
@@ -443,7 +524,8 @@ function calcRun(){
   const v=id=>parseFloat(document.getElementById(id).value)||0;
   const buy=v('c_buy'),sell=v('c_sell'),cb=v('c_cb');
   const profit=(sell-buy)+buy*cb/100-sell*0.05;
-  const o=document.getElementById('c_out'); if(o) o.textContent=Math.round(profit)+' ₽';
+  const o=document.getElementById('c_out'); if(o){ o.textContent=Math.round(profit)+' ₽';
+    o.classList.remove('flash'); void o.offsetWidth; o.classList.add('flash'); }
 }
 
 /* ---- интерактив: симулятор @BotFather ---- */
@@ -483,7 +565,10 @@ function bfStart(){
 function bfSend(){
   const inp=document.getElementById('bfInput'); const t=(inp.value||'').trim(); if(!t)return;
   bfPush('me',t); inp.value='';
-  setTimeout(()=>bfReply(t),250);
+  const c=document.getElementById('bfChat');
+  const typ=document.createElement('div'); typ.className='msg bot typing'; typ.innerHTML='<i></i><i></i><i></i>';
+  c.appendChild(typ); c.scrollTop=c.scrollHeight;
+  setTimeout(()=>{ typ.remove(); bfReply(t); }, 700);
 }
 function bfReply(t){
   if(bf.step===0){
@@ -522,35 +607,50 @@ function panelHTML(){
 function panelRender(){
   pnl={step:0,sel:-1}; drawPanel();
 }
+function stepbar(active){
+  return '<div class="pstepbar">'+[1,2,3].map(i=>`<i class="${i<=active?'on':''}"></i>`).join('')+'</div>';
+}
 function drawPanel(){
   const box=document.getElementById('pnlBox'); if(!box)return;
   if(pnl.step===0){
-    box.innerHTML='<div class="pstep">Шаг 1 из 3 · выберите товар для продажи</div><div class="pgrid">'+
-      PRODUCTS.map((p,i)=>`<div class="pcard${pnl.sel===i?' sel':''}" onclick="panelSel(${i})"><b>${p.n}</b><span>опт: ${p.p}</span></div>`).join('')+'</div>'+
+    box.innerHTML=stepbar(1)+'<div class="pstep">Шаг 1 из 3 · выберите товар для продажи</div><div class="pgrid">'+
+      PRODUCTS.map((p,i)=>`<div class="pcard${pnl.sel===i?' sel':''}" tabindex="0" onclick="panelSel(${i})" onkeydown="if(event.key==='Enter')panelSel(${i})"><b>${p.n}</b><span>опт: ${p.p}</span></div>`).join('')+'</div>'+
       (pnl.sel>=0?'<button class="pbtn" onclick="panelStep(1)">Далее →</button>':'');
   } else if(pnl.step===1){
     const p=PRODUCTS[pnl.sel];
-    box.innerHTML=`<div class="pstep">Шаг 2 из 3 · подтвердите заказ</div>
+    box.innerHTML=stepbar(2)+`<div class="pstep">Шаг 2 из 3 · подтвердите заказ</div>
       <div class="pcard sel"><b>${p.n}</b><span>опт: ${p.p}</span></div>
-      <button class="pbtn" onclick="panelStep(2)">Купить за ${p.p}</button>`;
+      <div style="display:flex;gap:10px;margin-top:14px"><button class="pbtn" style="background:var(--card2);color:var(--txt);border:1px solid var(--line)" onclick="panelStep(0)">← Назад</button>
+      <button class="pbtn" onclick="panelStep(2)">Купить за ${p.p}</button></div>`;
   } else if(pnl.step===2){
-    box.innerHTML=`<div class="pstep">Шаг 3 из 3 · оплата</div>
+    box.innerHTML=stepbar(3)+`<div class="pstep">Шаг 3 из 3 · оплата</div>
       <p style="color:var(--muted);margin:0 0 8px">Списываем с баланса аккаунта.</p>
       <button class="pbtn" onclick="panelStep(3)">Оплатить с баланса</button>`;
   } else {
     const p=PRODUCTS[pnl.sel];
-    box.innerHTML=`<div class="psuccess">✓ Заказ выполнен. Ключ «${p.n}» выдан покупателю мгновенно.</div>
-      <p class="note" style="margin-top:12px">Первая продажа сделана. В реальном курсе такой заказ засчитывается как активация.</p>`;
+    box.innerHTML=stepbar(3)+`<div class="psuccess">✓ Заказ выполнен. Ключ «${p.n}» выдан покупателю мгновенно.</div>
+      <p class="note" style="margin-top:12px">Первая продажа сделана. В реальном курсе такой заказ засчитывается как активация.</p>
+      <button class="pbtn" style="background:var(--card2);color:var(--txt);border:1px solid var(--line);margin-top:6px" onclick="panelRender()">↻ Пройти заново</button>`;
   }
 }
 function panelSel(i){ pnl.sel=i; drawPanel(); }
 function panelStep(s){ pnl.step=s; drawPanel(); }
 
-function markDone(){ done.add(key(cur.m,cur.l)); updateProg(); renderSide(); renderLesson(); }
+function markDone(){
+  const fresh=!done.has(key(cur.m,cur.l));
+  done.add(key(cur.m,cur.l)); updateProg(); renderSide(); renderLesson();
+  if(fresh) toast('Урок пройден ✓');
+}
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800);
+}
 function updateProg(){
   const pct=Math.round(done.size/total*100);
-  document.getElementById('progFill').style.width=pct+'%';
+  const f=document.getElementById('progFill');
+  f.style.width=pct+'%';
   document.getElementById('progPct').textContent=pct+'%';
+  f.classList.remove('bump'); void f.offsetWidth; f.classList.add('bump');
 }
 function goNext(){
   let {m,l}=cur;
