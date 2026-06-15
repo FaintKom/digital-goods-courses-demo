@@ -171,14 +171,14 @@
 // types: theory | sim | workshop. sim: 'botfather' | 'panel'.
 const MODULES = [
   { t:"Рынок и модели продаж", lessons:[
-      {t:"Что продаём и кто покупает", type:"theory", full:true},
+      {t:"Что продаём и кто покупает", type:"theory", full:true, example:true},
       {t:"Воркшоп: разбор ниш с создателями", type:"workshop", full:true} ]},
   { t:"Первая продажа руками", lessons:[
       {t:"Регистрация и пополнение баланса", type:"theory", full:true},
-      {t:"Интерактив: первый заказ в панели", type:"sim", sim:"panel", full:true},
+      {t:"Задание: первый заказ в панели", type:"sim", sim:"panel", full:true},
       {t:"Воркшоп: первая сделка вживую", type:"workshop"} ]},
   { t:"Витрина и каналы", lessons:[
-      {t:"Интерактив: создаём Telegram-бота", type:"sim", sim:"botfather", full:true},
+      {t:"Задание: создаём Telegram-бота", type:"sim", sim:"botfather", full:true},
       {t:"Простой сайт-витрина", type:"theory"},
       {t:"Воркшоп: запуск витрины", type:"workshop"} ]},
   { t:"Автоматизация без кода", lessons:[
@@ -210,6 +210,7 @@ const CONTENT = {
     <h2>Как устроен заработок</h2>
     <p>Оптовый поставщик даёт товар ниже рынка → вы ставите свою цену → маржа ваша.
        На обороте добавляется кэшбэк-уровень поставщика, и маржа растёт.</p>
+    {{EXAMPLE}}
     {{CHECK}}
     <div class="task">
       <h3>Практика урока</h3>
@@ -290,7 +291,7 @@ function renderLesson(){
   const mod=MODULES[cur.m], les=mod.lessons[cur.l];
   document.getElementById('crumbs').textContent=`Модуль ${cur.m+1} · ${mod.t}`;
   document.getElementById('lessonTitle').textContent=les.t;
-  const bm={theory:['b-theory','📖 Теория'],sim:['b-inter','🧩 Интерактив'],workshop:['b-work','🎥 Воркшоп']}[les.type];
+  const bm={theory:['b-theory','📖 Теория'],sim:['b-inter','🧩 Интерактивное задание'],workshop:['b-work','🎥 Воркшоп']}[les.type];
   document.getElementById('badge').innerHTML=`<span class="badge ${bm[0]}">${bm[1]}</span>`;
 
   const body=document.getElementById('lessonBody');
@@ -300,9 +301,11 @@ function renderLesson(){
   else {
     let c=CONTENT[key(cur.m,cur.l)];
     if(c){
+      c=c.replace('{{EXAMPLE}}', les.example?exampleHTML():'');
       c=c.replace('{{CHECK}}', CHECK);
       if(les.calc) c+=calcHTML();
       body.innerHTML=c;
+      if(les.example) exampleRun();
       if(les.calc) calcRun();
     } else {
       body.innerHTML=`<div class="placeholder">Демонстрационная версия. Конспект и материалы этого урока
@@ -325,10 +328,39 @@ function checkPick(el,ok){
                   :'✗ Не то. Маржа — это разница: 1100 − 800 = 300 ₽.';
 }
 
-/* калькулятор-тренажёр */
+/* интерактивный пример: визуализация маржи */
+function exampleHTML(){
+  return `<div class="sim"><div class="shead"><span class="st" style="color:var(--accent2)">Интерактивный пример</span>
+      <span class="shint">подвигайте — посмотрите, как появляется маржа</span></div>
+    <div class="pnl">
+      <div class="pgrid" style="grid-template-columns:1fr 1fr">
+        <div><label style="font-size:13px;color:var(--muted)">Закупка: <b id="ex_b">800</b> ₽</label>
+          <input id="ex_buy" type="range" min="100" max="2000" value="800" oninput="exampleRun()" style="width:100%;margin-top:6px"></div>
+        <div><label style="font-size:13px;color:var(--muted)">Продажа: <b id="ex_s">1100</b> ₽</label>
+          <input id="ex_sell" type="range" min="100" max="3000" value="1100" oninput="exampleRun()" style="width:100%;margin-top:6px"></div>
+      </div>
+      <div style="display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-top:14px">
+        <div id="ex_cost" style="background:#2b3340;display:flex;align-items:center;justify-content:center;font-size:12px;color:#cbd5e1">закупка</div>
+        <div id="ex_marg" style="background:var(--ok);display:flex;align-items:center;justify-content:center;font-size:12px;color:#0b1f17;font-weight:700">маржа</div>
+      </div>
+      <div style="margin-top:8px;color:var(--muted);font-size:14px">Маржа со сделки: <b id="ex_out" style="color:var(--ok)">300 ₽</b></div>
+    </div></div>
+    <p class="note">Это интерактивный пример: ученик понимает маржу, манипулируя числами, а не читая абзац. Оценки нет.</p>`;
+}
+function exampleRun(){
+  const b=+document.getElementById('ex_buy').value, s=+document.getElementById('ex_sell').value;
+  document.getElementById('ex_b').textContent=b;
+  document.getElementById('ex_s').textContent=s;
+  const marg=Math.max(s-b,0), tot=Math.max(s,1);
+  document.getElementById('ex_cost').style.width=(Math.min(b,s)/tot*100)+'%';
+  document.getElementById('ex_marg').style.width=(marg/tot*100)+'%';
+  document.getElementById('ex_out').textContent=marg+' ₽';
+}
+
+/* интерактивный пример: калькулятор */
 function calcHTML(){
-  return `<div class="sim"><div class="shead"><span class="st">Тренажёр-калькулятор</span>
-      <span class="shint">H5P · считается на платформе</span></div>
+  return `<div class="sim"><div class="shead"><span class="st" style="color:var(--accent2)">Интерактивный пример</span>
+      <span class="shint">калькулятор · считается на платформе</span></div>
     <div class="pnl">
       <div class="pgrid">
         <div><label style="font-size:13px;color:var(--muted)">Закупка, ₽</label><input id="c_buy" type="number" value="800" oninput="calcRun()" style="width:100%;background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px;margin-top:4px"></div>
@@ -353,7 +385,7 @@ let bf={step:0,name:''};
 function botfatherHTML(){
   return `<p>Задача: создать Telegram-бота для магазина через <b>@BotFather</b>. Пройдите диалог как в реальном Telegram —
      ниже рабочая симуляция интерфейса.</p>
-    <div class="sim"><div class="shead"><span class="st">Интерактив-симулятор</span>
+    <div class="sim"><div class="shead"><span class="st">Интерактивное задание</span>
       <span class="shint">кастомный HTML/JS · в Moodle — SCORM</span></div>
       <div class="tg">
         <div class="tgtop"><div class="ava">BF</div><div><div class="tname">BotFather</div><div class="tsub">bot</div></div></div>
@@ -416,7 +448,7 @@ let pnl={step:0,sel:-1};
 const PRODUCTS=[{n:'Steam 1000 ₽',p:'920 ₽'},{n:'Roblox 800 Robux',p:'690 ₽'},{n:'PSN 2000 ₽',p:'1840 ₽'}];
 function panelHTML(){
   return `<p>Задача: оформить первый заказ в панели платформы. Пройдите по шагам в симуляторе.</p>
-    <div class="sim"><div class="shead"><span class="st">Интерактив-симулятор</span>
+    <div class="sim"><div class="shead"><span class="st">Интерактивное задание</span>
       <span class="shint">кастомный HTML/JS · в Moodle — SCORM</span></div>
       <div class="pnl" id="pnlBox"></div></div>
     <p class="note">Реальный заказ на платформе = активация. В курсе шаг трекается и попадает в дашборд заказчика.</p>`;
