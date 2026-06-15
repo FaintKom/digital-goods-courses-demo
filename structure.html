@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Структура курсов — Цифровые товары</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+.nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(14px); background: rgba(10,10,11,0.72); border-bottom: 1px solid var(--line); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.02em; font-size: 17px; }
+.logo-mark { width: 30px; height: 30px; border-radius: 9px; background: var(--orange-500); color: var(--text-on-orange); display: grid; place-items: center; font-family: var(--font-mono); font-weight: 600; font-size: 17px; box-shadow: var(--glow-orange-sm); position: relative; }
+.logo-mark::after { content:""; position:absolute; right:-2px; bottom:-2px; width:8px; height:8px; border-radius:50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: var(--t-sm); color: var(--text-muted); transition: color var(--fast); }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--orange-400); }
+@media (max-width: 880px){ .nav-links .nav-hide { display: none; } }
+
+/* page head */
+.phead { padding: clamp(56px, 8vw, 104px) 0 var(--s-12); position: relative; overflow: hidden; }
+.phead .glow-blob { width: 460px; height: 460px; top: -200px; right: -120px; opacity: 0.5; }
+.crumb { font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: var(--s-6); }
+.crumb a { color: var(--text-muted); } .crumb a:hover { color: var(--orange-400); }
+.phead h1 { max-width: 18ch; margin-bottom: var(--s-5); }
+.phead p { color: var(--text-muted); font-size: var(--t-lg); max-width: 56ch; }
+
+/* funnel rail */
+.funnel { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-10); }
+@media (max-width: 880px){ .funnel { grid-template-columns: 1fr; } }
+.fcard { padding: var(--s-6); display: flex; flex-direction: column; gap: 6px; position: relative; }
+.fcard .fi { font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle); letter-spacing: 0.1em; text-transform: uppercase; }
+.fcard b { font-size: var(--t-lg); letter-spacing: -0.02em; }
+.fcard span { color: var(--text-muted); font-size: var(--t-sm); }
+.fcard.on { border-color: var(--line-orange); background: linear-gradient(180deg, rgba(255,106,31,0.10), transparent); }
+
+/* module block */
+.modwrap { display: flex; flex-direction: column; gap: var(--s-5); }
+.module { padding: 0; overflow: hidden; }
+.mod-head { display: flex; align-items: center; gap: var(--s-5); padding: var(--s-6) var(--s-8); cursor: pointer; user-select: none; transition: background var(--fast); }
+.mod-head:hover { background: var(--surface-2); }
+.mod-no { font-family: var(--font-mono); font-size: var(--t-md); color: var(--orange-500); font-weight: 500; width: 44px; flex-shrink: 0; }
+.mod-title { flex: 1; }
+.mod-title h3 { font-size: var(--t-lg); letter-spacing: -0.02em; }
+.mod-title p { color: var(--text-muted); font-size: var(--t-sm); margin-top: 3px; }
+.mod-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle); letter-spacing: 0.06em; white-space: nowrap; }
+.mod-chev { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--text-muted); transition: transform var(--base) var(--ease), border-color var(--fast), color var(--fast); flex-shrink: 0; }
+.module.open .mod-chev { transform: rotate(180deg); border-color: var(--line-orange); color: var(--orange-400); }
+.mod-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--slow) var(--ease); }
+.module.open .mod-body { grid-template-rows: 1fr; }
+.mod-body-inner { overflow: hidden; }
+.lessons { list-style: none; margin: 0; padding: 0 var(--s-8) var(--s-6) calc(var(--s-8) + 44px + var(--s-5)); display: flex; flex-direction: column; }
+.lesson { display: flex; align-items: center; gap: var(--s-4); padding: 13px 0; border-top: 1px solid var(--line); font-size: var(--t-base); }
+.lesson .ln { font-family: var(--font-mono); font-size: 12px; color: var(--text-subtle); width: 28px; }
+.lesson .lt { flex: 1; }
+.lesson .ltag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--text-muted); border: 1px solid var(--line); }
+.lesson .ltag.int { color: var(--orange-400); border-color: var(--line-orange); background: rgba(255,106,31,0.07); }
+.lesson .ltag.web { color: var(--amber); border-color: rgba(255,178,89,0.4); background: rgba(255,178,89,0.07); }
+
+/* mini courses */
+.mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+@media (max-width: 720px){ .mini-grid { grid-template-columns: 1fr; } }
+.mini { padding: var(--s-8); position: relative; overflow: hidden; }
+.mini .glyph { position: absolute; top: -6px; right: 12px; font-family: var(--font-mono); font-size: 92px; color: rgba(255,106,31,0.07); }
+.mini .prog-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-subtle); }
+.mini h3 { margin: 10px 0 6px; font-size: var(--t-lg); }
+.mini p { color: var(--text-muted); font-size: var(--t-sm); }
+
+.sec-head { max-width: 640px; margin-bottom: var(--s-10); }
+.sec-head h2 { margin: var(--s-4) 0; }
+.sec-head p { color: var(--text-muted); font-size: var(--t-md); }
+
+/* cta */
+.cta-band { display: flex; align-items: center; justify-content: space-between; gap: var(--s-8); flex-wrap: wrap; padding: var(--s-10); border: 1px solid var(--line-orange); border-radius: var(--radius-xl); background: linear-gradient(150deg, var(--surface-2), var(--bg-2)); position: relative; overflow: hidden; }
+.cta-band .glow-blob { width: 360px; height: 360px; bottom: -200px; right: -60px; opacity: 0.6; }
+.cta-band h2 { font-size: var(--t-2xl); position: relative; max-width: 20ch; }
+.cta-band .hero-cta { display: flex; gap: 12px; position: relative; }
+
+footer { border-top: 1px solid var(--line); padding: var(--s-12) 0; margin-top: var(--s-16); }
+.foot-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.foot-inner p { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--text-subtle); letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">Ц</span><span>Цифровые товары<span class="subtle" style="font-weight:500;"> · Курсы</span></span></a>
+    <div class="nav-links">
+      <a class="nav-hide" href="index.html#how">Как устроено</a>
+      <a class="active" href="structure.html">Структура курсов</a>
+      <a class="nav-hide" href="index.html#formats">Форматы</a>
+      <a class="btn btn-ghost btn-sm" href="course.html">Открыть демо-урок →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="phead">
+  <div class="glow-blob"></div>
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Главная</a> / Структура курсов</div>
+    <span class="eyebrow">Программа обучения</span>
+    <h1 style="margin-top:var(--s-5);">Воронка: от бесплатного лид-магнита до запуска за <span class="mark mark--ink">14 дней</span></h1>
+    <p>Три ступени. На каждой студент делает что-то руками на платформе — это держит вовлечённость и ведёт к первой реальной сделке.</p>
+    <div class="funnel">
+      <div class="card fcard on"><div class="fi">Ступень 01 · бесплатно</div><b>Лид-магнит</b><span>Воронка 5–7 уроков · регистрация и ранний успех</span></div>
+      <div class="card fcard"><div class="fi">Ступень 02 · основной</div><b>7 модулей</b><span>~25–30 уроков · теория + интерактивы + воркшопы</span></div>
+      <div class="card fcard"><div class="fi">Ступень 03 · допродажи</div><b>Мини-курсы</b><span>Короткие, под конкретный сегмент</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LEAD MAGNET -->
+<section class="section-pad" style="padding-top:var(--s-8);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Ступень 01 · лид-магнит</span>
+      <h2>«Рынок цифровых товаров»</h2>
+      <p>Цель — регистрация на платформе и ранний успех: первая микро-сделка уже в демо.</p>
+    </div>
+    <div class="modwrap" id="leadMods"></div>
+  </div>
+</section>
+
+<!-- MAIN COURSE -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Ступень 02 · основной курс</span>
+      <h2>«Запуск магазина цифровых товаров за 14 дней»</h2>
+      <p>Цель — довести до первого заказа через платформу и подвести к легализации бизнеса. Нажмите модуль, чтобы раскрыть уроки.</p>
+    </div>
+    <div class="modwrap" id="mainMods"></div>
+  </div>
+</section>
+
+<!-- MINI COURSES -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Ступень 03 · мини-курсы</span>
+      <h2>Сегментные допродажи</h2>
+      <p>Короткие прикладные курсы под конкретную задачу. Продаются отдельно или в пакете.</p>
+    </div>
+    <div class="mini-grid">
+      <div class="card card-hover mini">
+        <span class="glyph">@</span>
+        <span class="prog-kicker">Telegram-магазин под ключ</span>
+        <h3>Бот + приём оплат + автовыдача</h3>
+        <p>Без кода. Готовый шаблон бота, подключение платежей, автоматическая выдача товара после оплаты.</p>
+      </div>
+      <div class="card card-hover mini">
+        <span class="glyph">€</span>
+        <span class="prog-kicker">Международная компания</span>
+        <h3>Юрисдикции, счета, налоги</h3>
+        <p>Когда и где оформляться для цифрового бизнеса, как открыть счёт и не попасть на блокировки.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="cta-band">
+      <div class="glow-blob"></div>
+      <h2>Посмотрите, как один урок собирает все форматы сразу</h2>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="course.html">Открыть демо-урок →</a>
+        <a class="btn btn-ghost btn-lg" href="index.html#formats">Форматы запуска</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">Ц</span><span>Цифровые товары · Курсы</span></a>
+    <p>ДЕМОНСТРАЦИОННАЯ КОНЦЕПЦИЯ КУРСОВ · ПОДГОТОВЛЕНО ДЛЯ ОБСУЖДЕНИЯ</p>
+  </div>
+</footer>
+
+<script>
+// ---- data ----
+const lead = [
+  { t: "Что за рынок и сколько на нём зарабатывают", d: "коды, гифт-карты, топапы — кто и зачем покупает", meta: "ТЕОРИЯ · 8 МИН", lessons: [
+    ["Карта рынка цифровых товаров","int"],["Кто покупатель и за что платит","th"],["Проверка: посчитай объём ниши","quiz"] ] },
+  { t: "3 модели продаж", d: "маркетплейс, Telegram-бот, свой сайт", meta: "ТЕОРИЯ · 10 МИН", lessons: [
+    ["Маркетплейс vs бот vs сайт","th"],["Интерактив: выбери канал под себя","int"] ] },
+  { t: "Откуда брать товар оптом", d: "обзор поставщика, маржа и кэшбэк", meta: "ТЕОРИЯ · 7 МИН", lessons: [
+    ["Поставщики и условия","th"],["Кэшбэк-уровни на примере","int"] ] },
+  { t: "Первая сделка на пальцах", d: "купил дешевле — продал дороже", meta: "СИМУЛЯТОР · 6 МИН", lessons: [
+    ["Симулятор: оформи первую сделку","sim"] ] },
+  { t: "Что дальше", d: "переход на основной курс", meta: "ИТОГ · 3 МИН", lessons: [
+    ["Куда расти и что на основном курсе","th"] ] },
+];
+const main = [
+  { t: "Рынок и модели продаж", d: "выбор ниши и канала под себя", meta: "4 УРОКА · ~35 МИН", lessons: [
+    ["Ниши и спрос: где деньги","th"],["Интерактив: матрица «ниша × канал»","int"],["Запись вебинара: разбор ниш зрителей","web"],["Проверка по модулю","quiz"] ] },
+  { t: "Первая продажа руками", d: "без кода, через панель платформы", meta: "4 УРОКА · ~40 МИН", lessons: [
+    ["Панель платформы: товар за 5 минут","th"],["Симулятор: оформи заказ","sim"],["Приём первой оплаты","th"],["Проверка по модулю","quiz"] ] },
+  { t: "Витрина и каналы", d: "Telegram-бот, сайт, размещение на площадках", meta: "4 УРОКА · ~42 МИН", lessons: [
+    ["Витрина: что и в каком порядке","th"],["Интерактив: собери карточку товара","int"],["Размещение на площадках","th"],["Запись вебинара: аудит витрин","web"] ] },
+  { t: "Автоматизация без кода", d: "готовый бот-шаблон, no-code или ТЗ для фрилансера", meta: "4 УРОКА · ~38 МИН", lessons: [
+    ["Что автоматизировать в первую очередь","th"],["Симулятор: настрой бота-выдачу","sim"],["ТЗ для фрилансера: шаблон","th"],["Проверка по модулю","quiz"] ] },
+  { t: "Юнит-экономика", d: "маржа, уровни кэшбэка, валютные риски", meta: "4 УРОКА · ~36 МИН", lessons: [
+    ["Из чего складывается прибыль","th"],["Интерактив: калькулятор юнит-экономики","int"],["Валютные риски на примере","int"],["Проверка по модулю","quiz"] ] },
+  { t: "Легализация бизнеса", d: "когда оформляться, выбор юрисдикции, счёт", meta: "3 УРОКА · ~30 МИН", lessons: [
+    ["Когда пора оформляться","th"],["Выбор юрисдикции и счёта","th"],["Запись вебинара: вопросы по легализации","web"] ] },
+  { t: "Команда и масштаб", d: "саппорт, автоматизация, делегирование", meta: "3 УРОКА · ~28 МИН", lessons: [
+    ["Первый саппорт и регламенты","th"],["Делегирование без потери качества","th"],["Запись вебинара: как масштабировались кейсы","web"] ] },
+];
+
+const tagLabel = { th:"Теория", int:"Интерактив", quiz:"Проверка", sim:"Симулятор", web:"Вебинар" };
+const tagClass = { int:"int", web:"web" };
+
+function moduleHTML(m, idx, open){
+  const lessons = m.lessons.map((l,i)=>{
+    const cls = tagClass[l[1]] || "";
+    return `<li class="lesson"><span class="ln mono">${String(i+1).padStart(2,'0')}</span><span class="lt">${l[0]}</span><span class="ltag ${cls}">${tagLabel[l[1]]}</span></li>`;
+  }).join('');
+  return `<div class="card module ${open?'open':''}">
+    <div class="mod-head">
+      <span class="mod-no">${String(idx+1).padStart(2,'0')}</span>
+      <div class="mod-title"><h3>${m.t}</h3><p>${m.d}</p></div>
+      <span class="mod-meta">${m.meta}</span>
+      <span class="mod-chev">▾</span>
+    </div>
+    <div class="mod-body"><div class="mod-body-inner"><ul class="lessons">${lessons}</ul></div></div>
+  </div>`;
+}
+
+document.getElementById('leadMods').innerHTML = lead.map((m,i)=>moduleHTML(m,i,i===0)).join('');
+document.getElementById('mainMods').innerHTML = main.map((m,i)=>moduleHTML(m,i,i===0)).join('');
+
+document.querySelectorAll('.mod-head').forEach(h=>{
+  h.addEventListener('click', ()=> h.closest('.module').classList.toggle('open'));
+});
+</script>
+</body>
+</html>

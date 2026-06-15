@@ -4,249 +4,532 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Курсы по продаже цифровых товаров — концепция</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
 <style>
-  :root{
-    --bg:#0f1115; --card:#171a21; --card2:#1d212b; --line:#2a2f3a;
-    --txt:#e8eaed; --muted:#9aa3b2; --accent:#ff7a18; --accent2:#3b82f6; --ok:#34d399;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--txt);
-    font:16px/1.55 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:980px;margin:0 auto;padding:0 16px}
+/* ---------- page chrome ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(14px);
+  background: rgba(10,10,11,0.72);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.02em; font-size: 17px; }
+.logo-mark {
+  width: 30px; height: 30px; border-radius: 9px;
+  background: var(--orange-500); color: var(--text-on-orange);
+  display: grid; place-items: center; font-family: var(--font-mono); font-weight: 600; font-size: 17px;
+  box-shadow: var(--glow-orange-sm); position: relative;
+}
+.logo-mark::after { content:""; position:absolute; right:-2px; bottom:-2px; width:8px; height:8px; border-radius:50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a { font-size: var(--t-sm); color: var(--text-muted); transition: color var(--fast); }
+.nav-links a:hover { color: var(--text); }
+@media (max-width: 880px){ .nav-links .nav-hide { display: none; } }
 
-  header{position:sticky;top:0;background:rgba(15,17,21,.85);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);z-index:10}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .logo{font-weight:800;font-size:18px}
-  .logo b{color:var(--accent)}
-  .btn{background:var(--accent);color:#111;font-weight:700;padding:10px 18px;border-radius:8px;
-    font-size:14px;display:inline-block;transition:.15s;cursor:pointer;border:none}
-  .btn:hover{filter:brightness(1.08)}
-  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+/* ---------- hero ---------- */
+.hero { padding: clamp(64px, 11vw, 128px) 0 var(--s-24); overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--s-16); align-items: center; }
+@media (max-width: 980px){ .hero-grid { grid-template-columns: 1fr; gap: var(--s-12); } }
+.hero h1 { margin: var(--s-5) 0 var(--s-6); }
+.hero-sub { font-size: clamp(16px, 2vw, var(--t-lg)); color: var(--text-muted); max-width: 38ch; }
+.hero-cta { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.hero-note { margin-top: var(--s-5); font-family: var(--font-mono); font-size: var(--t-xs); color: var(--text-subtle); letter-spacing: 0.04em; }
 
-  .hero{padding:70px 0 50px;text-align:center}
-  .hero h1{font-size:38px;line-height:1.15;margin:0 0 16px}
-  .hero h1 span{color:var(--accent)}
-  .hero p{color:var(--muted);font-size:18px;max-width:640px;margin:0 auto 28px}
-  .hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .demo-note{margin-top:18px;color:var(--muted);font-size:13px}
+/* hero visual — stacked lesson preview */
+.hero-art { position: relative; }
+.preview-card {
+  background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.preview-top { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--bg-2); }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.preview-tab { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--text-subtle); letter-spacing: 0.08em; }
+.preview-body { padding: 22px; }
+.pv-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--orange-400); text-transform: uppercase; }
+.pv-h { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin: 10px 0 14px; }
+.pv-line { height: 9px; border-radius: 6px; background: var(--surface-3); margin-bottom: 9px; }
+.pv-mini {
+  margin-top: 18px; padding: 16px; border-radius: var(--radius-md);
+  background: var(--bg-2); border: 1px solid var(--line);
+}
+.pv-mini-row { display: flex; align-items: baseline; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.pv-num { font-size: 26px; color: var(--orange-500); font-weight: 500; }
+.pv-bar { height: 7px; background: var(--surface-3); border-radius: 6px; margin-top: 10px; overflow: hidden; }
+.pv-bar > i { display: block; height: 100%; width: 68%; background: linear-gradient(90deg, var(--orange-600), var(--orange-400)); border-radius: 6px; }
+.float-badge {
+  position: absolute; left: -22px; bottom: 36px;
+  background: var(--surface-2); border: 1px solid var(--line-orange); border-radius: var(--radius-pill);
+  padding: 9px 16px; font-family: var(--font-mono); font-size: 12px; color: var(--text);
+  box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px;
+}
+.float-badge .pip { width: 8px; height: 8px; border-radius: 50%; background: var(--orange-500); box-shadow: 0 0 10px var(--orange-500); }
+@media (max-width: 980px){ .float-badge { left: 10px; } }
 
-  h2{font-size:24px;margin:54px 0 6px;text-align:center}
-  .sub{color:var(--muted);text-align:center;margin:0 0 26px}
+/* ---------- logos / stat strip ---------- */
+.statstrip { display: flex; flex-wrap: wrap; gap: 12px 40px; padding: var(--s-8) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat b { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+.stat span { font-family: var(--font-mono); font-size: 12px; color: var(--text-subtle); letter-spacing: 0.06em; text-transform: uppercase; }
 
-  .blended{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
-  .bstep{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
-  .bstep .ic{font-size:26px}
-  .bstep b{display:block;margin:8px 0 4px}
-  .bstep span{color:var(--muted);font-size:13px}
-  .bstep .ar{color:var(--accent);font-size:20px}
+/* ---------- section heading ---------- */
+.sec-head { max-width: 640px; margin-bottom: var(--s-12); }
+.sec-head h2 { margin: var(--s-4) 0 var(--s-4); }
+.sec-head p { color: var(--text-muted); font-size: var(--t-md); }
 
-  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:14px;margin-bottom:8px}
-  .flow span{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:6px 13px}
-  .flow .arr{background:none;border:none;color:var(--accent);padding:0}
+/* ---------- how it works ---------- */
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); }
+@media (max-width: 880px){ .cards-3 { grid-template-columns: 1fr; } }
+.feat { padding: var(--s-8); display: flex; flex-direction: column; gap: var(--s-4); min-height: 240px; }
+.feat h3 { font-size: var(--t-lg); }
+.feat p { color: var(--text-muted); font-size: var(--t-base); }
+.feat .num { margin-top: auto; font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.1em; }
 
-  .lvl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
-  .lvl-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
-  .tag{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:6px}
-  .t-free{background:rgba(52,211,153,.15);color:var(--ok)}
-  .t-core{background:rgba(255,122,24,.15);color:var(--accent)}
-  .t-seg{background:rgba(59,130,246,.15);color:var(--accent2)}
-  .lvl h3{margin:8px 0 2px;font-size:20px}
-  .goal{color:var(--muted);font-size:14px;margin:0}
-  ol.mods{margin:12px 0 0;padding-left:0;counter-reset:m;list-style:none}
-  ol.mods li{counter-increment:m;position:relative;padding:10px 0 10px 42px;border-top:1px solid var(--line)}
-  ol.mods li:first-child{border-top:none}
-  ol.mods li::before{content:counter(m);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:8px;
-    background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
-    font-size:13px;font-weight:700;color:var(--accent)}
-  .mtitle{font-weight:600}
-  .mnote{color:var(--muted);font-size:14px;display:block;margin-top:2px}
-  .seg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
-  .seg{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:16px}
-  .seg b{display:block;margin-bottom:4px}
-  .seg span{color:var(--muted);font-size:13px}
+/* ---------- journey path ---------- */
+.path { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+.step {
+  position: relative; flex: 1 1 140px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md);
+  padding: 18px 16px; transition: border-color var(--base), transform var(--base);
+}
+.step:hover { border-color: var(--line-orange); transform: translateY(-2px); }
+.step .si { font-family: var(--font-mono); font-size: 11px; color: var(--orange-400); letter-spacing: 0.08em; }
+.step .st { margin-top: 8px; font-weight: 600; font-size: var(--t-base); letter-spacing: -0.01em; }
+.step.is-now { background: linear-gradient(180deg, rgba(255,106,31,0.14), rgba(255,106,31,0.03)); border-color: var(--line-orange); }
+.path-note { margin-top: var(--s-5); font-family: var(--font-mono); font-size: var(--t-xs); color: var(--text-subtle); letter-spacing: 0.04em; }
 
-  /* programs A/B */
-  .progs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .prog-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
-  .prog-card.reco{border-color:var(--accent)}
-  .prog-card .ph{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-  .prog-card h3{margin:0;font-size:19px}
-  .reco-badge{font-size:11px;font-weight:700;background:rgba(255,122,24,.15);color:var(--accent);padding:3px 8px;border-radius:5px}
-  .prog-card .tagline{color:var(--muted);font-size:14px;margin:2px 0 14px}
-  .pl{margin:0;padding:0;list-style:none}
-  .pl li{padding:7px 0 7px 24px;position:relative;font-size:14px;border-top:1px solid var(--line)}
-  .pl li:first-child{border-top:none}
-  .pl li.plus::before{content:"+";position:absolute;left:0;color:var(--ok);font-weight:700}
-  .pl li.minus::before{content:"–";position:absolute;left:0;color:var(--muted);font-weight:700}
+/* ---------- calculator ---------- */
+.calc { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line-strong); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); }
+@media (max-width: 880px){ .calc { grid-template-columns: 1fr; } }
+.calc-controls { padding: var(--s-10); background: var(--surface); }
+.calc-out { padding: var(--s-10); background: var(--bg-2); position: relative; overflow: hidden; }
+.calc-out .glow-blob { width: 280px; height: 280px; top: -80px; right: -80px; opacity: 0.6; }
+.field { margin-bottom: var(--s-6); }
+.field:last-child { margin-bottom: 0; }
+.field-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.field-top label { font-size: var(--t-sm); color: var(--text-muted); font-weight: 600; }
+.field-val { font-family: var(--font-mono); font-size: var(--t-md); color: var(--orange-400); font-weight: 500; }
+input[type=range]{ -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 999px; background: var(--surface-3); outline: none; }
+input[type=range]::-webkit-slider-thumb{ -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--orange-500); cursor: pointer; box-shadow: 0 0 0 4px rgba(255,106,31,0.18), var(--glow-orange-sm); transition: transform var(--fast); }
+input[type=range]::-webkit-slider-thumb:hover{ transform: scale(1.12); }
+input[type=range]::-moz-range-thumb{ width: 22px; height: 22px; border: none; border-radius: 50%; background: var(--orange-500); cursor: pointer; box-shadow: 0 0 0 4px rgba(255,106,31,0.18); }
+.calc-out-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-subtle); }
+.calc-big { font-size: clamp(48px, 7vw, 80px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin: 10px 0 4px; color: var(--text); }
+.calc-big .cur { color: var(--orange-500); }
+.calc-rows { margin-top: var(--s-8); display: flex; flex-direction: column; gap: 0; }
+.calc-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-top: 1px solid var(--line); font-size: var(--t-base); }
+.calc-row span { color: var(--text-muted); }
+.calc-row b { font-family: var(--font-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.calc-row.accent b { color: var(--orange-400); }
 
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
-  .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
-  .box h4{margin:0 0 10px;font-size:15px}
-  .box ul{margin:0;padding-left:18px;color:var(--muted)}
-  .box li{margin:6px 0}
+/* ---------- programs ---------- */
+.prog-grid { display: grid; grid-template-columns: 1.2fr 1.2fr 0.9fr; gap: var(--s-5); }
+@media (max-width: 980px){ .prog-grid { grid-template-columns: 1fr; } }
+.prog {
+  position: relative; overflow: hidden; padding: var(--s-8);
+  display: flex; flex-direction: column; min-height: 320px;
+}
+.prog .glyph { position: absolute; top: -10px; right: 6px; font-family: var(--font-mono); font-size: 120px; line-height: 1; color: rgba(255,106,31,0.07); font-weight: 500; pointer-events: none; }
+.prog-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-subtle); }
+.prog h3 { margin: 12px 0 6px; font-size: var(--t-xl); max-width: 16ch; }
+.prog-meta { font-family: var(--font-mono); font-size: 12px; color: var(--orange-400); margin-bottom: var(--s-5); }
+.prog ol, .prog ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.prog li { display: flex; gap: 10px; font-size: var(--t-sm); color: var(--text-muted); }
+.prog li .n { font-family: var(--font-mono); color: var(--orange-500); font-size: 12px; flex-shrink: 0; width: 18px; }
+.prog-foot { margin-top: auto; padding-top: var(--s-6); }
+.prog.feature { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border-color: var(--line-strong); }
 
-  .cta-band{background:linear-gradient(135deg,#1d212b,#171a21);border:1px solid var(--line);
-    border-radius:16px;padding:36px;text-align:center;margin:54px 0}
-  .cta-band h2{margin:0 0 10px}
-  .cta-band p{color:var(--muted);margin:0 0 22px}
+/* ---------- two formats ---------- */
+.formats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+@media (max-width: 880px){ .formats { grid-template-columns: 1fr; } }
+.fmt { padding: var(--s-8); }
+.fmt-head { display: flex; align-items: center; gap: 12px; margin-bottom: var(--s-2); }
+.fmt-head h3 { font-size: var(--t-xl); }
+.fmt-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+.fmt-tag.base { background: rgba(255,106,31,0.12); color: var(--orange-400); border: 1px solid var(--line-orange); }
+.fmt-tag.flow { background: var(--surface-3); color: var(--text-muted); border: 1px solid var(--line); }
+.fmt-desc { color: var(--text-muted); font-size: var(--t-base); margin-bottom: var(--s-6); }
+.fmt ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.fmt li { display: flex; gap: 12px; font-size: var(--t-base); align-items: flex-start; }
+.fmt li .m { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; margin-top: 1px; }
+.fmt li.pro .m { background: rgba(255,106,31,0.16); color: var(--orange-400); }
+.fmt li.con .m { background: var(--surface-3); color: var(--text-subtle); }
+.fmt li.con span { color: var(--text-subtle); }
 
-  footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px;text-align:center;padding:24px 0;margin-top:40px}
-  @media(max-width:680px){.two,.progs,.blended{grid-template-columns:1fr}.hero h1{font-size:30px}}
+/* ---------- materials ---------- */
+.mat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+@media (max-width: 880px){ .mat-grid { grid-template-columns: 1fr; } }
+.mat { padding: var(--s-8); }
+.mat h4 { font-size: var(--t-md); font-weight: 700; margin-bottom: var(--s-5); display: flex; align-items: center; gap: 10px; }
+.mat ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.mat li { display: flex; gap: 12px; font-size: var(--t-base); color: var(--text-muted); align-items: flex-start; }
+.mat li .tick { color: var(--orange-500); flex-shrink: 0; font-family: var(--font-mono); }
+
+/* ---------- final CTA ---------- */
+.final { position: relative; overflow: hidden; border-radius: var(--radius-2xl); border: 1px solid var(--line-orange); background: linear-gradient(160deg, var(--surface-2), var(--bg-2)); padding: clamp(40px, 6vw, 80px); text-align: center; }
+.final .glow-blob { width: 460px; height: 460px; bottom: -240px; left: 50%; transform: translateX(-50%); opacity: 0.7; }
+.final h2 { font-size: clamp(30px, 4.4vw, 56px); position: relative; }
+.final p { color: var(--text-muted); font-size: var(--t-md); max-width: 50ch; margin: var(--s-5) auto var(--s-8); position: relative; }
+.final .hero-cta { justify-content: center; position: relative; }
+
+/* ---------- footer ---------- */
+footer { border-top: 1px solid var(--line); padding: var(--s-12) 0; }
+.foot-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.foot-inner p { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--text-subtle); letter-spacing: 0.04em; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap nav">
-    <div class="logo">Цифровые товары<b>·</b>Курсы</div>
-    <a class="btn" href="course.html">Открыть демо-урок →</a>
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">Ц</span>
+      <span>Цифровые товары<span class="subtle" style="font-weight:500;"> · Курсы</span></span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-hide" href="#how">Как устроено</a>
+      <a class="nav-hide" href="structure.html">Структура курсов</a>
+      <a class="nav-hide" href="#formats">Форматы</a>
+      <a class="btn btn-ghost btn-sm" href="course.html">Открыть демо-урок →</a>
+    </div>
   </div>
-</header>
+</nav>
 
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="glow-blob" style="width:560px;height:560px;top:-180px;left:-120px;opacity:0.55;"></div>
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="eyebrow">Blended · теория + живые вебинары</span>
+      <h1>Курсы, которые приводят студентов на <span class="mark mark--ink">вашу</span> платформу</h1>
+      <p class="hero-sub">Сначала студент разбирает теорию и проходит задания сам. Потом приходит на живой вебинар к создателям платформы. Видео не снимаем — курс дешевле запустить и проще обновлять.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="course.html">Посмотреть демо-урок</a>
+        <a class="btn btn-ghost btn-lg" href="structure.html">Структура курсов</a>
+      </div>
+      <p class="hero-note">Демонстрационная концепция. Контент уроков — черновой, для показа формата.</p>
+    </div>
+
+    <div class="hero-art reveal in">
+      <div class="preview-card">
+        <div class="preview-top">
+          <span class="dot" style="background:#ff5f57"></span>
+          <span class="dot" style="background:#febc2e"></span>
+          <span class="dot" style="background:#28c840"></span>
+          <span class="preview-tab">УРОК 4 / 14 · 12 МИН</span>
+        </div>
+        <div class="preview-body">
+          <div class="pv-eyebrow">Интерактивный пример</div>
+          <div class="pv-h">Юнит-экономика сделки</div>
+          <div class="pv-line" style="width:100%"></div>
+          <div class="pv-line" style="width:86%"></div>
+          <div class="pv-line" style="width:64%"></div>
+          <div class="pv-mini">
+            <div class="pv-mini-row"><span>Маржа с заказа</span><span>после кэшбэка</span></div>
+            <div class="pv-num tnum">₽ 1 240</div>
+            <div class="pv-bar"><i></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="float-badge"><span class="pip"></span> крути параметры → видишь результат</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STAT STRIP ================= -->
 <div class="wrap">
-
-  <section class="hero">
-    <h1>Blended-курсы, которые приводят<br><span>студентов на вашу платформу</span></h1>
-    <p>Сначала студент разбирает теорию и проходит задания сам. Потом приходит на живой вебинар
-       к создателям платформы. Видео не снимаем, поэтому курс дешевле запустить и проще обновлять.</p>
-    <div class="cta">
-      <a class="btn" href="course.html">Посмотреть демо-урок</a>
-      <a class="btn btn-ghost" href="#structure">Структура курсов</a>
-    </div>
-    <p class="demo-note">Демонстрационная концепция. Контент уроков — черновой, для показа формата.</p>
-  </section>
-
-  <h2>Как устроено обучение</h2>
-  <p class="sub">Смешанный формат: теорию проходят сами, вебинары ведут создатели</p>
-  <div class="blended">
-    <div class="bstep"><div class="ic">📖</div><b>Теория и проверки</b><span>Читают в своём темпе. После блока — короткий тест. Всё на Moodle.</span></div>
-    <div class="bstep"><div class="ic">🧩</div><b>Интерактивы</b><span>Примеры, где крутишь параметры и видишь результат. И симуляторы: создать бота, оформить заказ.</span></div>
-    <div class="bstep"><div class="ic">🎥</div><b>Вебинары создателей</b><span>Создатели разбирают кейсы вживую. Записи остаются в библиотеке.</span></div>
+  <div class="statstrip reveal">
+    <div class="stat"><b class="tnum">7</b><span>модулей в основном курсе</span></div>
+    <div class="stat"><b class="tnum">~28</b><span>уроков</span></div>
+    <div class="stat"><b class="tnum">14</b><span>дней до первого заказа</span></div>
+    <div class="stat"><b class="tnum">0</b><span>часов видео-съёмки</span></div>
   </div>
-
-  <h2 id="structure">Путь студента</h2>
-  <p class="sub">Ведём от первой продажи до своего дела. На каждом шаге студент что-то делает на платформе.</p>
-  <div class="flow">
-    <span>Узнал рынок</span><span class="arr">→</span>
-    <span>Первая продажа</span><span class="arr">→</span>
-    <span>Витрина</span><span class="arr">→</span>
-    <span>Автоматизация</span><span class="arr">→</span>
-    <span>Юнит-экономика</span><span class="arr">→</span>
-    <span>Легализация</span><span class="arr">→</span>
-    <span>Масштаб</span>
-  </div>
-
-  <!-- LEVEL 0 -->
-  <div class="lvl">
-    <div class="lvl-head">
-      <span class="tag t-free">Бесплатно · воронка</span>
-      <span class="goal">5–7 уроков · теория + интерактив · дрип в Telegram/email</span>
-    </div>
-    <h3>Лид-магнит: «Рынок цифровых товаров»</h3>
-    <p class="goal">Цель — регистрация на платформе и ранний успех: первая микро-сделка уже в демо.</p>
-    <ol class="mods">
-      <li><span class="mtitle">Что за рынок и сколько на нём зарабатывают</span><span class="mnote">коды, гифт-карты, топапы — кто и зачем покупает</span></li>
-      <li><span class="mtitle">3 модели продаж</span><span class="mnote">маркетплейс, Telegram-бот, свой сайт</span></li>
-      <li><span class="mtitle">Откуда брать товар оптом</span><span class="mnote">обзор поставщика, маржа и кэшбэк</span></li>
-      <li><span class="mtitle">Первая сделка на пальцах</span><span class="mnote">купил дешевле — продал дороже</span></li>
-      <li><span class="mtitle">Что дальше</span><span class="mnote">переход на основной курс</span></li>
-    </ol>
-  </div>
-
-  <!-- LEVEL 1 -->
-  <div class="lvl">
-    <div class="lvl-head">
-      <span class="tag t-core">Основной курс</span>
-      <span class="goal">7 модулей · ~25–30 уроков · теория + интерактивы + воркшопы</span>
-    </div>
-    <h3>«Запуск магазина цифровых товаров за 14 дней»</h3>
-    <p class="goal">Цель — довести до первого заказа через платформу и подвести к легализации бизнеса.</p>
-    <ol class="mods">
-      <li><span class="mtitle">Рынок и модели продаж</span><span class="mnote">выбор ниши и канала под себя</span></li>
-      <li><span class="mtitle">Первая продажа руками</span><span class="mnote">без кода, через панель платформы</span></li>
-      <li><span class="mtitle">Витрина и каналы</span><span class="mnote">Telegram-бот, сайт, размещение на площадках</span></li>
-      <li><span class="mtitle">Автоматизация без кода</span><span class="mnote">готовый бот-шаблон, no-code или ТЗ для фрилансера</span></li>
-      <li><span class="mtitle">Юнит-экономика</span><span class="mnote">маржа, уровни кэшбэка, валютные риски</span></li>
-      <li><span class="mtitle">Легализация бизнеса</span><span class="mnote">когда оформляться, выбор юрисдикции, счёт</span></li>
-      <li><span class="mtitle">Команда и масштаб</span><span class="mnote">саппорт, автоматизация, делегирование</span></li>
-    </ol>
-  </div>
-
-  <!-- LEVEL 2 -->
-  <div class="lvl">
-    <div class="lvl-head">
-      <span class="tag t-seg">Мини-курсы · допродажи</span>
-      <span class="goal">короткие, под конкретный сегмент</span>
-    </div>
-    <h3>Сегментные мини-курсы</h3>
-    <div class="seg-grid">
-      <div class="seg"><b>Telegram-магазин под ключ</b><span>бот + приём оплат + автовыдача, без кода</span></div>
-      <div class="seg"><b>Международная компания для цифрового бизнеса</b><span>юрисдикции, счета, налоги</span></div>
-    </div>
-  </div>
-
-  <!-- PROGRAMS A/B -->
-  <h2>Два формата запуска</h2>
-  <p class="sub">Наполнение одинаковое, разница в расписании. Можно дать оба формата.</p>
-  <div class="progs">
-    <div class="prog-card reco">
-      <div class="ph"><h3>A. Evergreen</h3><span class="reco-badge">База</span></div>
-      <p class="tagline">Самостоятельно, старт в любой момент</p>
-      <ul class="pl">
-        <li class="plus">Масштаб не ограничен, на нового студента расходов почти нет</li>
-        <li class="plus">Ученик начинает сразу, не ждёт набора группы</li>
-        <li class="plus">Вебинары каждый месяц плюс библиотека записей</li>
-        <li class="minus">Ниже дисциплина, доходят до конца реже</li>
-      </ul>
-    </div>
-    <div class="prog-card">
-      <div class="ph"><h3>B. Поток</h3></div>
-      <p class="tagline">Группа стартует вместе, живые воркшопы по графику</p>
-      <ul class="pl">
-        <li class="plus">До конца доходят чаще: группа подгоняет</li>
-        <li class="plus">Дедлайн помогает продавать</li>
-        <li class="minus">Плохо масштабируется, создателям нужны фиксированные даты</li>
-        <li class="minus">Ученик ждёт старта потока, часть отваливается</li>
-      </ul>
-    </div>
-  </div>
-
-  <h2>Форматы и материалы</h2>
-  <p class="sub">Теория, интерактивные задания и живые разборы</p>
-  <div class="two">
-    <div class="box">
-      <h4>Контент урока</h4>
-      <ul>
-        <li>Теория с интерактивными примерами: крутишь параметры, видишь результат</li>
-        <li>Короткие проверки после блоков (H5P), их легко обновлять</li>
-        <li>Задания-симуляторы: создать бота, оформить заказ</li>
-        <li>Вебинары с создателями, записи остаются в библиотеке</li>
-      </ul>
-    </div>
-    <div class="box">
-      <h4>Платформа и доп. материалы</h4>
-      <ul>
-        <li>Moodle с бренд-оформлением, поддерживает все нужные типы заданий</li>
-        <li>Хостинг оплачивает заказчик — нужен свой сервер</li>
-        <li>Доп. материалы студентам: калькулятор юнит-экономики, чек-листы, шаблон бота</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="cta-band">
-    <h2>Посмотрите, как выглядит урок</h2>
-    <p>Первый урок мы собрали как витрину. В нём сразу все форматы: теория, схема, выноска,
-       запись вебинара, интерактивный пример, проверка, задание-симулятор и шаблон.</p>
-    <a class="btn" href="course.html">Открыть демо первого урока →</a>
-  </div>
-
 </div>
 
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how" class="section-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Как устроено обучение</span>
+      <h2>Смешанный формат: теорию проходят сами, вебинары ведут создатели</h2>
+    </div>
+    <div class="cards-3">
+      <div class="card card-hover feat reveal">
+        <div class="tile">📖</div>
+        <h3>Теория и проверки</h3>
+        <p>Читают в своём темпе. После блока — короткий тест. Всё на Moodle с бренд-оформлением.</p>
+        <div class="num">01 — SELF-PACED</div>
+      </div>
+      <div class="card card-hover feat reveal">
+        <div class="tile">🧩</div>
+        <h3>Интерактивы</h3>
+        <p>Примеры, где крутишь параметры и видишь результат. И симуляторы: создать бота, оформить заказ.</p>
+        <div class="num">02 — HANDS-ON</div>
+      </div>
+      <div class="card card-hover feat reveal">
+        <div class="tile">🎥</div>
+        <h3>Вебинары создателей</h3>
+        <p>Создатели разбирают кейсы вживую. Записи остаются в библиотеке и доступны всегда.</p>
+        <div class="num">03 — LIVE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JOURNEY ================= -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Путь студента</span>
+      <h2>От первой продажи до своего дела</h2>
+      <p>На каждом шаге студент что-то делает на платформе — не просто читает.</p>
+    </div>
+    <div class="path reveal">
+      <div class="step is-now"><div class="si">01</div><div class="st">Узнал рынок</div></div>
+      <div class="step"><div class="si">02</div><div class="st">Первая продажа</div></div>
+      <div class="step"><div class="si">03</div><div class="st">Витрина</div></div>
+      <div class="step"><div class="si">04</div><div class="st">Автоматизация</div></div>
+      <div class="step"><div class="si">05</div><div class="st">Юнит-экономика</div></div>
+      <div class="step"><div class="si">06</div><div class="st">Легализация</div></div>
+      <div class="step"><div class="si">07</div><div class="st">Масштаб</div></div>
+    </div>
+    <p class="path-note">БЕСПЛАТНО · ВОРОНКА 5–7 УРОКОВ · ТЕОРИЯ + ИНТЕРАКТИВ · ДРИП В TELEGRAM/EMAIL</p>
+  </div>
+</section>
+
+<!-- ================= CALCULATOR ================= -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Интерактив из урока · попробуйте</span>
+      <h2>Калькулятор юнит-экономики</h2>
+      <p>Тот самый формат «крути параметры — видишь результат». Студент крутит закупку, наценку и кэшбэк — и сразу видит прибыль с заказа.</p>
+    </div>
+    <div class="calc reveal">
+      <div class="calc-controls">
+        <div class="field">
+          <div class="field-top"><label for="buy">Закупка товара</label><span class="field-val tnum" id="buyV">₽ 600</span></div>
+          <input type="range" id="buy" min="100" max="3000" step="50" value="600">
+        </div>
+        <div class="field">
+          <div class="field-top"><label for="markup">Наценка</label><span class="field-val tnum" id="markupV">120%</span></div>
+          <input type="range" id="markup" min="10" max="300" step="5" value="120">
+        </div>
+        <div class="field">
+          <div class="field-top"><label for="cashback">Кэшбэк от поставщика</label><span class="field-val tnum" id="cashbackV">8%</span></div>
+          <input type="range" id="cashback" min="0" max="25" step="1" value="8">
+        </div>
+        <div class="field">
+          <div class="field-top"><label for="orders">Заказов в месяц</label><span class="field-val tnum" id="ordersV">90</span></div>
+          <input type="range" id="orders" min="10" max="500" step="10" value="90">
+        </div>
+        <div class="field">
+          <div class="field-top"><label for="fee">Комиссия платформы/эквайринга</label><span class="field-val tnum" id="feeV">5%</span></div>
+          <input type="range" id="fee" min="0" max="15" step="1" value="5">
+        </div>
+      </div>
+      <div class="calc-out">
+        <div class="glow-blob"></div>
+        <div style="position:relative;">
+          <div class="calc-out-label">Прибыль с одного заказа</div>
+          <div class="calc-big"><span class="cur">₽</span> <span id="profit" class="tnum">0</span></div>
+          <div class="calc-rows">
+            <div class="calc-row"><span>Цена продажи</span><b class="tnum" id="price">—</b></div>
+            <div class="calc-row"><span>Кэшбэк с закупки</span><b class="tnum" id="cb">—</b></div>
+            <div class="calc-row"><span>Комиссия с продажи</span><b class="tnum" id="feeAbs">—</b></div>
+            <div class="calc-row accent"><span>Маржинальность</span><b class="tnum" id="margin">—</b></div>
+            <div class="calc-row accent"><span>Прибыль в месяц</span><b class="tnum" id="monthly">—</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROGRAMS ================= -->
+<section id="programs" class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head reveal" style="max-width:720px;">
+      <span class="eyebrow">Структура курсов</span>
+      <h2>Лид-магнит, основной курс и сегментные мини-курсы</h2>
+      <p>Воронка ведёт от бесплатного знакомства к запуску магазина за 14 дней. Полная программа — на отдельной странице.</p>
+    </div>
+    <div class="prog-grid">
+      <div class="card prog reveal">
+        <span class="glyph">★</span>
+        <span class="prog-kicker">Лид-магнит · бесплатно</span>
+        <h3>Рынок цифровых товаров</h3>
+        <div class="prog-meta">ВОРОНКА 5–7 УРОКОВ</div>
+        <ol>
+          <li><span class="n">01</span> Что за рынок и сколько на нём зарабатывают</li>
+          <li><span class="n">02</span> 3 модели продаж: маркетплейс, бот, свой сайт</li>
+          <li><span class="n">03</span> Откуда брать товар оптом</li>
+          <li><span class="n">04</span> Первая сделка на пальцах</li>
+          <li><span class="n">05</span> Что дальше → основной курс</li>
+        </ol>
+      </div>
+
+      <div class="card prog feature reveal">
+        <span class="glyph">14</span>
+        <span class="prog-kicker">Основной курс · 7 модулей</span>
+        <h3>Запуск магазина за 14 дней</h3>
+        <div class="prog-meta">~25–30 УРОКОВ · ТЕОРИЯ + ВОРКШОПЫ</div>
+        <ol>
+          <li><span class="n">01</span> Рынок и модели продаж</li>
+          <li><span class="n">02</span> Первая продажа руками</li>
+          <li><span class="n">03</span> Витрина и каналы</li>
+          <li><span class="n">04</span> Автоматизация без кода</li>
+          <li><span class="n">05</span> Юнит-экономика</li>
+          <li><span class="n">06</span> Легализация бизнеса</li>
+          <li><span class="n">07</span> Команда и масштаб</li>
+        </ol>
+      </div>
+
+      <div class="card prog reveal">
+        <span class="glyph">+</span>
+        <span class="prog-kicker">Мини-курсы · допродажи</span>
+        <h3>Под конкретный сегмент</h3>
+        <div class="prog-meta">КОРОТКИЕ · ПРИКЛАДНЫЕ</div>
+        <ul>
+          <li><span class="n">→</span> <span><b style="color:var(--text)">Telegram-магазин под ключ</b> — бот, приём оплат, автовыдача, без кода</span></li>
+          <li><span class="n">→</span> <span><b style="color:var(--text)">Международная компания</b> — юрисдикции, счета, налоги</span></li>
+        </ul>
+        <div class="prog-foot">
+          <a class="btn btn-ghost btn-sm btn-block" href="structure.html">Вся структура →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TWO FORMATS ================= -->
+<section id="formats" class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Два формата запуска</span>
+      <h2>Наполнение одинаковое — разница в расписании</h2>
+      <p>Можно дать оба формата одновременно. Выбор за вами.</p>
+    </div>
+    <div class="formats">
+      <div class="card prog feature reveal fmt">
+        <div class="fmt-head"><h3>A. Evergreen</h3><span class="fmt-tag base">База</span></div>
+        <p class="fmt-desc">Самостоятельно, старт в любой момент.</p>
+        <ul>
+          <li class="pro"><span class="m">+</span><span>Масштаб не ограничен — на нового студента расходов почти нет</span></li>
+          <li class="pro"><span class="m">+</span><span>Ученик начинает сразу, не ждёт набора группы</span></li>
+          <li class="pro"><span class="m">+</span><span>Вебинары каждый месяц плюс библиотека записей</span></li>
+          <li class="con"><span class="m">−</span><span>Ниже дисциплина, доходят до конца реже</span></li>
+        </ul>
+      </div>
+      <div class="card prog reveal fmt">
+        <div class="fmt-head"><h3>B. Поток</h3><span class="fmt-tag flow">Группа</span></div>
+        <p class="fmt-desc">Группа стартует вместе, живые воркшопы по графику.</p>
+        <ul>
+          <li class="pro"><span class="m">+</span><span>До конца доходят чаще: группа подгоняет</span></li>
+          <li class="pro"><span class="m">+</span><span>Дедлайн помогает продавать</span></li>
+          <li class="con"><span class="m">−</span><span>Плохо масштабируется, нужны фиксированные даты</span></li>
+          <li class="con"><span class="m">−</span><span>Ученик ждёт старта потока, часть отваливается</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MATERIALS ================= -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Форматы и материалы</span>
+      <h2>Теория, интерактивные задания и живые разборы</h2>
+    </div>
+    <div class="mat-grid">
+      <div class="card mat reveal">
+        <h4><span class="tile" style="width:36px;height:36px;font-size:18px;">◐</span> Контент урока</h4>
+        <ul>
+          <li><span class="tick">→</span> Теория с интерактивными примерами: крутишь параметры, видишь результат</li>
+          <li><span class="tick">→</span> Короткие проверки после блоков (H5P), их легко обновлять</li>
+          <li><span class="tick">→</span> Задания-симуляторы: создать бота, оформить заказ</li>
+          <li><span class="tick">→</span> Вебинары с создателями, записи остаются в библиотеке</li>
+        </ul>
+      </div>
+      <div class="card mat reveal">
+        <h4><span class="tile" style="width:36px;height:36px;font-size:18px;">▤</span> Платформа и доп. материалы</h4>
+        <ul>
+          <li><span class="tick">→</span> Moodle с бренд-оформлением, поддерживает все нужные типы заданий</li>
+          <li><span class="tick">→</span> Хостинг оплачивает заказчик — нужен свой сервер</li>
+          <li><span class="tick">→</span> Студентам: калькулятор юнит-экономики, чек-листы, шаблон бота</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="section-pad" style="padding-top:0;">
+  <div class="wrap">
+    <div class="final reveal">
+      <div class="glow-blob"></div>
+      <span class="eyebrow eyebrow--nodash" style="justify-content:center;">Посмотрите, как выглядит урок</span>
+      <h2>Первый урок собран как <span class="mark mark--ink">витрина</span></h2>
+      <p>В нём сразу все форматы: теория, схема, выноска, запись вебинара, интерактивный пример, проверка, задание-симулятор и шаблон.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="course.html">Открыть демо первого урока →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
-  Демонстрационная концепция курсов · подготовлено для обсуждения
+  <div class="wrap foot-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">Ц</span><span>Цифровые товары · Курсы</span></a>
+    <p>ДЕМОНСТРАЦИОННАЯ КОНЦЕПЦИЯ КУРСОВ · ПОДГОТОВЛЕНО ДЛЯ ОБСУЖДЕНИЯ</p>
+  </div>
 </footer>
 
+<script>
+// ---------- unit-economics calculator ----------
+(function(){
+  const ids = ['buy','markup','cashback','orders','fee'];
+  const el = {};
+  ids.forEach(i => el[i] = document.getElementById(i));
+  const fmt = n => Math.round(n).toLocaleString('ru-RU');
+  function calc(){
+    const buy = +el.buy.value, markup = +el.markup.value, cashback = +el.cashback.value,
+          orders = +el.orders.value, fee = +el.fee.value;
+    const price = buy * (1 + markup/100);
+    const cb = buy * cashback/100;
+    const feeAbs = price * fee/100;
+    const profit = price - buy + cb - feeAbs;
+    const margin = price > 0 ? (profit/price*100) : 0;
+    const monthly = profit * orders;
+    // labels
+    document.getElementById('buyV').textContent = '₽ ' + fmt(buy);
+    document.getElementById('markupV').textContent = markup + '%';
+    document.getElementById('cashbackV').textContent = cashback + '%';
+    document.getElementById('ordersV').textContent = orders;
+    document.getElementById('feeV').textContent = fee + '%';
+    // outputs
+    document.getElementById('profit').textContent = fmt(profit);
+    document.getElementById('price').textContent = '₽ ' + fmt(price);
+    document.getElementById('cb').textContent = '+ ₽ ' + fmt(cb);
+    document.getElementById('feeAbs').textContent = '− ₽ ' + fmt(feeAbs);
+    document.getElementById('margin').textContent = margin.toFixed(1) + '%';
+    document.getElementById('monthly').textContent = '₽ ' + fmt(monthly);
+  }
+  ids.forEach(i => el[i].addEventListener('input', calc));
+  calc();
+})();
+
+// ---------- reveal on scroll ----------
+(function(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal:not(.in)').forEach(n => io.observe(n));
+})();
+</script>
 </body>
 </html>
