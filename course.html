@@ -7,14 +7,13 @@
 <style>
   :root{
     --bg:#0f1115; --panel:#141821; --card:#171a21; --card2:#1d212b; --line:#2a2f3a;
-    --txt:#e8eaed; --muted:#9aa3b2; --accent:#ff7a18; --ok:#34d399;
+    --txt:#e8eaed; --muted:#9aa3b2; --accent:#ff7a18; --accent2:#3b82f6; --ok:#34d399; --bad:#f87171;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--txt);
     font:16px/1.6 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
   a{color:inherit;text-decoration:none}
 
-  /* top bar */
   .top{display:flex;align-items:center;justify-content:space-between;gap:16px;
     height:58px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line);
     position:sticky;top:0;z-index:20}
@@ -25,8 +24,7 @@
   .prog .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .35s}
   .prog .pct{font-size:13px;color:var(--muted);min-width:34px;text-align:right}
 
-  /* layout */
-  .layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 58px)}
+  .layout{display:grid;grid-template-columns:330px 1fr;min-height:calc(100vh - 58px)}
   .side{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;max-height:calc(100vh - 58px);position:sticky;top:58px}
   .mod{border-bottom:1px solid var(--line)}
   .mod>.mhead{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
@@ -38,23 +36,23 @@
   .mod.open .chev{transform:rotate(90deg)}
   .lessons{display:none;padding:0 0 8px}
   .mod.open .lessons{display:block}
-  .lesson{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 50px;cursor:pointer;font-size:13.5px;color:var(--muted)}
+  .lesson{display:flex;align-items:center;gap:9px;padding:9px 16px 9px 46px;cursor:pointer;font-size:13.5px;color:var(--muted)}
   .lesson:hover{background:var(--card);color:var(--txt)}
   .lesson.active{background:var(--card2);color:var(--txt);box-shadow:inset 3px 0 0 var(--accent)}
   .lesson .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;
     display:flex;align-items:center;justify-content:center;font-size:11px}
   .lesson.done .dot{background:var(--ok);border-color:var(--ok);color:#0b1f17}
-  .lesson .lock{margin-left:auto;font-size:11px;opacity:.6}
+  .lesson .ic{font-size:13px;flex-shrink:0}
+  .lesson .ttl{flex:1}
 
-  /* main */
-  .main{padding:34px 40px 80px;max-width:820px}
+  .main{padding:30px 40px 80px;max-width:820px}
   .crumbs{color:var(--muted);font-size:13px;margin-bottom:10px}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+    padding:4px 10px;border-radius:6px;margin-bottom:14px}
+  .b-theory{background:rgba(59,130,246,.15);color:var(--accent2)}
+  .b-inter{background:rgba(255,122,24,.15);color:var(--accent)}
+  .b-work{background:rgba(52,211,153,.15);color:var(--ok)}
   .main h1{font-size:26px;margin:0 0 18px}
-  .video{aspect-ratio:16/9;background:linear-gradient(135deg,#1d212b,#10131a);border:1px solid var(--line);
-    border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-bottom:26px}
-  .play{width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center}
-  .play:after{content:"";border-left:20px solid #111;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
-  .video span{color:var(--muted);font-size:13px}
   .body h2{font-size:19px;margin:26px 0 10px}
   .body p{margin:0 0 14px}
   .body ul{margin:0 0 14px;padding-left:20px}
@@ -66,12 +64,47 @@
   .placeholder{background:var(--card);border:1px dashed var(--line);border-radius:12px;
     padding:40px;text-align:center;color:var(--muted)}
 
+  /* interactive widget shell (H5P-style) */
+  .widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:22px 0}
+  .widget .wtag{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.5px;text-transform:uppercase}
+  .widget h3{margin:6px 0 14px;font-size:17px}
+  .opt{display:block;width:100%;text-align:left;background:var(--card2);border:1px solid var(--line);
+    color:var(--txt);border-radius:9px;padding:12px 14px;margin:8px 0;cursor:pointer;font:inherit;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.correct{border-color:var(--ok);background:rgba(52,211,153,.12)}
+  .opt.wrong{border-color:var(--bad);background:rgba(248,113,113,.12)}
+  .fb{margin-top:12px;font-size:14px;display:none}
+  .fb.show{display:block}
+  .fb.ok{color:var(--ok)} .fb.no{color:var(--bad)}
+
+  .calc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .calc label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+  .calc input{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;padding:10px 12px;font:inherit}
+  .calc .full{grid-column:1/-1}
+  .result{grid-column:1/-1;background:var(--card2);border:1px solid var(--line);border-radius:10px;
+    padding:16px;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
+  .result .big{font-size:24px;font-weight:800;color:var(--ok)}
+  .result .lbl{color:var(--muted);font-size:13px}
+
+  /* workshop */
+  .ws{background:linear-gradient(135deg,#15241d,#171a21);border:1px solid var(--line);
+    border-radius:14px;padding:22px;margin:8px 0 22px}
+  .ws .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--ok)}
+  .ws .live .pulse{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:p 1.8s infinite}
+  @keyframes p{70%{box-shadow:0 0 0 8px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  .ws h3{margin:8px 0 4px;font-size:18px}
+  .ws .when{color:var(--muted);font-size:14px;margin-bottom:14px}
+  .ws .lib{border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+  .ws .lib b{font-size:13px;color:var(--muted);display:block;margin-bottom:8px}
+  .ws .rec{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:14px;color:var(--muted)}
+  .ws .rec::before{content:"▶";color:var(--accent);font-size:11px}
+
   .navbtns{display:flex;justify-content:space-between;gap:12px;margin-top:34px;flex-wrap:wrap}
   .btn{border:none;cursor:pointer;font:inherit;font-weight:700;padding:12px 20px;border-radius:9px}
   .btn-done{background:var(--ok);color:#0b1f17}
   .btn-done.is-done{background:var(--card2);color:var(--muted);cursor:default}
   .btn-next{background:var(--accent);color:#111}
-  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
 
   .menu-toggle{display:none}
   @media(max-width:860px){
@@ -81,6 +114,7 @@
     .menu-toggle{display:inline-block;background:var(--card2);border:1px solid var(--line);color:var(--txt);
       border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
     .main{padding:24px 18px 70px}
+    .calc{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -102,8 +136,8 @@
   <aside class="side" id="side"></aside>
   <main class="main">
     <div class="crumbs" id="crumbs"></div>
+    <div id="badge"></div>
     <h1 id="lessonTitle"></h1>
-    <div class="video"><div class="play"></div><span>Демо · здесь будет видео урока</span></div>
     <div class="body" id="lessonBody"></div>
     <div class="navbtns">
       <button class="btn btn-done" id="doneBtn" onclick="markDone()">Отметить пройденным</button>
@@ -113,37 +147,38 @@
 </div>
 
 <script>
-// ponytail: in-memory demo state, no backend. Resets on reload — fine for a demo.
+// ponytail: in-memory demo, no backend. Real version = H5P interactives in Moodle, tracked via SCORM/xAPI.
+// types: theory | interactive | workshop. widget: 'quiz' | 'calc' | null.
 const MODULES = [
   { t:"Рынок и модели продаж", lessons:[
-      {t:"Что продаём и кто покупает", full:true},
-      {t:"3 модели: маркетплейс, бот, сайт"},
-      {t:"Выбор ниши под себя"} ]},
+      {t:"Что продаём и кто покупает", type:"theory", full:true},
+      {t:"Проверь себя: где маржа?", type:"interactive", widget:"quiz", full:true},
+      {t:"Воркшоп: разбор ниш с создателями", type:"workshop", full:true} ]},
   { t:"Первая продажа руками", lessons:[
-      {t:"Регистрация и пополнение баланса", full:true},
-      {t:"Первая сделка через панель"},
-      {t:"Выдача товара покупателю"} ]},
+      {t:"Регистрация и пополнение баланса", type:"theory", full:true},
+      {t:"Первая сделка через панель", type:"theory"},
+      {t:"Воркшоп: первая сделка вживую", type:"workshop"} ]},
   { t:"Витрина и каналы", lessons:[
-      {t:"Telegram-бот за вечер"},
-      {t:"Простой сайт-витрина"},
-      {t:"Размещение на площадках"} ]},
+      {t:"Telegram-бот за вечер", type:"theory"},
+      {t:"Простой сайт-витрина", type:"theory"},
+      {t:"Воркшоп: запуск витрины", type:"workshop"} ]},
   { t:"Автоматизация без кода", lessons:[
-      {t:"Готовый бот-шаблон"},
-      {t:"No-code связки"},
-      {t:"ТЗ для фрилансера"} ]},
+      {t:"Готовый бот-шаблон", type:"theory"},
+      {t:"No-code связки и ТЗ фрилансеру", type:"theory"},
+      {t:"Воркшоп: автоматизация", type:"workshop"} ]},
   { t:"Юнит-экономика", lessons:[
-      {t:"Маржа и уровни кэшбэка"},
-      {t:"Валютные риски"} ]},
+      {t:"Калькулятор маржи и кэшбэка", type:"interactive", widget:"calc", full:true},
+      {t:"Валютные риски", type:"theory"},
+      {t:"Воркшоп: считаем экономику", type:"workshop"} ]},
   { t:"Легализация бизнеса", lessons:[
-      {t:"Когда оформляться — а когда рано"},
-      {t:"Выбор юрисдикции"},
-      {t:"Открытие счёта"} ]},
+      {t:"Когда оформляться — а когда рано", type:"theory"},
+      {t:"Выбор юрисдикции", type:"theory"},
+      {t:"Воркшоп: вопросы по компании", type:"workshop"} ]},
   { t:"Команда и масштаб", lessons:[
-      {t:"Саппорт и автоответы"},
-      {t:"Делегирование"} ]},
+      {t:"Саппорт и автоответы", type:"theory"},
+      {t:"Делегирование", type:"theory"} ]},
 ];
 
-// real demo content for the "full" lessons, keyed "modIdx.lesIdx"
 const CONTENT = {
   "0.0":`
     <p>Цифровые товары — это всё, что доставляется кодом, а не курьером: ключи активации игр,
@@ -156,17 +191,16 @@ const CONTENT = {
       <li><b>Спрос круглый год</b> — игры, подписки и пополнения покупают постоянно.</li>
     </ul>
     <h2>Как устроен заработок</h2>
-    <p>Схема простая: оптовый поставщик даёт товар ниже рынка → вы ставите свою цену →
-       маржа остаётся вам. На обороте добавляется кэшбэк-уровень поставщика, и маржа растёт.</p>
+    <p>Оптовый поставщик даёт товар ниже рынка → вы ставите свою цену → маржа ваша.
+       На обороте добавляется кэшбэк-уровень поставщика, и маржа растёт.</p>
     <div class="task">
       <h3>Практика урока</h3>
-      <p>1. Зарегистрируйтесь на платформе-поставщике (ссылка в материалах урока).</p>
-      <p>2. Найдите в каталоге 3 товара и сравните оптовую цену с ценой на маркетплейсе.</p>
-      <p>3. Посчитайте маржу по каждому. Запишите самый выгодный.</p>
-    </div>
-    <p>Это и есть ваш первый шаг: вы уже видите реальную разницу в цене — на ней и строится бизнес.</p>`,
+      <p>1. Зарегистрируйтесь на платформе-поставщике (ссылка в материалах).</p>
+      <p>2. Найдите 3 товара и сравните оптовую цену с ценой на маркетплейсе.</p>
+      <p>3. В следующем уроке проверим, понимаете ли вы, где именно появляется маржа.</p>
+    </div>`,
   "1.0":`
-    <p>В этом уроке делаем первый реальный шаг внутри платформы: создаём аккаунт и пополняем баланс,
+    <p>Делаем первый реальный шаг внутри платформы: создаём аккаунт и пополняем баланс,
        с которого будут оплачиваться товары.</p>
     <h2>Шаги</h2>
     <ul>
@@ -174,42 +208,54 @@ const CONTENT = {
       <li>Откройте раздел «Баланс» и пополните на минимальную сумму для теста.</li>
       <li>Проверьте, что средства зачислились и доступны для заказа.</li>
     </ul>
-    <p>Минимальное пополнение нужно, чтобы пройти весь путь до выдачи товара на живом примере,
-       не вкладывая много.</p>
     <div class="task">
       <h3>Практика урока</h3>
       <p>1. Пополните баланс на тестовую сумму.</p>
-      <p>2. Сделайте скриншот зачисления — это подтверждение шага.</p>
+      <p>2. Загрузите скриншот зачисления — система отметит шаг пройденным (= активация в дашборде заказчика).</p>
     </div>`,
 };
+
+// workshop blocks per "m.l" of workshop lessons (demo data)
+function workshopHTML(){
+  return `
+    <div class="ws">
+      <span class="live"><span class="pulse"></span>Ближайший воркшоп</span>
+      <h3>Живой разбор с основателями платформы</h3>
+      <div class="when">Каждый месяц · следующий — через 6 дней · Zoom, ссылка в платформе</div>
+      <p style="color:var(--muted);margin:0">Создатели разбирают реальные кейсы учеников, отвечают на вопросы,
+         показывают, что сейчас хорошо продаётся. Запись попадёт в библиотеку.</p>
+      <div class="lib">
+        <b>Записи прошлых воркшопов</b>
+        <div class="rec">Как выбрать нишу под себя — 47 мин</div>
+        <div class="rec">Разбор ошибок новичков — 39 мин</div>
+        <div class="rec">Q&amp;A: налоги и оформление — 52 мин</div>
+      </div>
+    </div>`;
+}
 
 let cur = {m:0, l:0};
 const done = new Set();
 let total = 0;
 MODULES.forEach(m=>total+=m.lessons.length);
-
-function key(m,l){return m+"."+l}
+const key=(m,l)=>m+"."+l;
+const icon=t=> t==="workshop"?"🎥": t==="interactive"?"🧩":"📖";
 
 function renderSide(){
   const side=document.getElementById('side');
   side.innerHTML='';
   MODULES.forEach((mod,mi)=>{
-    const open = mi===cur.m;
     const md=document.createElement('div');
-    md.className='mod'+(open?' open':'');
+    md.className='mod'+(mi===cur.m?' open':'');
     md.innerHTML=`<div class="mhead"><span class="mnum">${mi+1}</span>
-        <span class="mttl">${mod.t}</span><span class="chev">▶</span></div>
-      <div class="lessons"></div>`;
-    md.querySelector('.mhead').onclick=()=>{md.classList.toggle('open')};
+        <span class="mttl">${mod.t}</span><span class="chev">▶</span></div><div class="lessons"></div>`;
+    md.querySelector('.mhead').onclick=()=>md.classList.toggle('open');
     const lc=md.querySelector('.lessons');
     mod.lessons.forEach((les,li)=>{
-      const k=key(mi,li);
-      const isDone=done.has(k);
-      const active=(mi===cur.m&&li===cur.l);
+      const k=key(mi,li), isDone=done.has(k), active=(mi===cur.m&&li===cur.l);
       const el=document.createElement('div');
       el.className='lesson'+(active?' active':'')+(isDone?' done':'');
-      el.innerHTML=`<span class="dot">${isDone?'✓':''}</span><span>${les.t}</span>`+
-        (les.full?'':'<span class="lock">демо</span>');
+      el.innerHTML=`<span class="dot">${isDone?'✓':''}</span>
+        <span class="ic">${icon(les.type)}</span><span class="ttl">${les.t}</span>`;
       el.onclick=()=>{cur={m:mi,l:li};renderSide();renderLesson();
         document.querySelector('.side').classList.remove('show')};
       lc.appendChild(el);
@@ -222,38 +268,87 @@ function renderLesson(){
   const mod=MODULES[cur.m], les=mod.lessons[cur.l];
   document.getElementById('crumbs').textContent=`Модуль ${cur.m+1} · ${mod.t}`;
   document.getElementById('lessonTitle').textContent=les.t;
+  const bm={theory:['b-theory','📖 Теория'],interactive:['b-inter','🧩 Интерактив'],workshop:['b-work','🎥 Воркшоп']}[les.type];
+  document.getElementById('badge').innerHTML=`<span class="badge ${bm[0]}">${bm[1]}</span>`;
+
   const body=document.getElementById('lessonBody');
-  const c=CONTENT[key(cur.m,cur.l)];
-  body.innerHTML = c || `<div class="placeholder">
-      Это демонстрационная версия. Полный конспект и задания этого урока
-      готовятся в рамках разработки курса.<br><br>
-      Откройте уроки без пометки <b>«демо»</b> — там показан реальный формат.</div>`;
+  if(les.type==="workshop"){ body.innerHTML=workshopHTML(); }
+  else if(les.widget==="quiz"){ body.innerHTML=quizHTML(); }
+  else if(les.widget==="calc"){ body.innerHTML=calcHTML(); calcRun(); }
+  else {
+    const c=CONTENT[key(cur.m,cur.l)];
+    body.innerHTML = c || `<div class="placeholder">
+      Демонстрационная версия. Полный конспект и интерактивы этого урока готовятся
+      в рамках разработки курса.<br><br>Откройте уроки <b>📖/🧩/🎥</b> в первых модулях — там реальный формат.</div>`;
+  }
   const db=document.getElementById('doneBtn');
   if(done.has(key(cur.m,cur.l))){db.textContent='Пройдено ✓';db.classList.add('is-done')}
   else{db.textContent='Отметить пройденным';db.classList.remove('is-done')}
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function markDone(){
-  done.add(key(cur.m,cur.l));
-  updateProg();renderSide();renderLesson();
+/* ---- interactive: quiz ---- */
+function quizHTML(){
+  return `<div class="widget">
+    <span class="wtag">H5P · Один вопрос</span>
+    <h3>Вы купили ключ за 800 ₽ и продали за 1100 ₽. Где ваша маржа?</h3>
+    <button class="opt" onclick="quizPick(this,false)">1100 ₽ — это вся выручка</button>
+    <button class="opt" onclick="quizPick(this,true)">300 ₽ — разница между ценой продажи и закупки</button>
+    <button class="opt" onclick="quizPick(this,false)">800 ₽ — это и есть прибыль</button>
+    <div class="fb" id="qfb"></div>
+  </div>
+  <p style="color:var(--muted)">В реальном курсе это H5P-объект: трекается в Moodle, балл идёт в прогресс ученика.</p>`;
+}
+function quizPick(el,ok){
+  document.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(ok?'correct':'wrong');
+  const fb=document.getElementById('qfb');
+  fb.className='fb show '+(ok?'ok':'no');
+  fb.textContent = ok
+    ? '✓ Верно. Маржа = цена продажи − закупка = 300 ₽. С кэшбэком поставщика она ещё выше.'
+    : '✗ Не то. Маржа — это разница: 1100 − 800 = 300 ₽. Попробуйте увидеть её в следующей сделке.';
 }
 
+/* ---- interactive: unit-economics calculator ---- */
+function calcHTML(){
+  return `<div class="widget">
+    <span class="wtag">H5P · Калькулятор</span>
+    <h3>Калькулятор маржи с кэшбэком</h3>
+    <div class="calc">
+      <div><label>Закупка, ₽</label><input id="c_buy" type="number" value="800" oninput="calcRun()"></div>
+      <div><label>Цена продажи, ₽</label><input id="c_sell" type="number" value="1100" oninput="calcRun()"></div>
+      <div><label>Кэшбэк поставщика, %</label><input id="c_cb" type="number" value="8" oninput="calcRun()"></div>
+      <div><label>Комиссия площадки, %</label><input id="c_fee" type="number" value="5" oninput="calcRun()"></div>
+      <div class="result">
+        <span class="lbl">Чистая прибыль со сделки</span>
+        <span class="big" id="c_out">—</span>
+      </div>
+    </div>
+  </div>
+  <p style="color:var(--muted)">Тот же калькулятор отдаём ученику как шаблон. В курсе — H5P, считает на платформе.</p>`;
+}
+function calcRun(){
+  const v=id=>parseFloat(document.getElementById(id).value)||0;
+  const buy=v('c_buy'), sell=v('c_sell'), cb=v('c_cb'), fee=v('c_fee');
+  const profit = (sell - buy) + buy*cb/100 - sell*fee/100;
+  document.getElementById('c_out').textContent = Math.round(profit)+' ₽';
+}
+
+function markDone(){ done.add(key(cur.m,cur.l)); updateProg(); renderSide(); renderLesson(); }
 function updateProg(){
   const pct=Math.round(done.size/total*100);
   document.getElementById('progFill').style.width=pct+'%';
   document.getElementById('progPct').textContent=pct+'%';
 }
-
 function goNext(){
   let {m,l}=cur;
   if(l+1<MODULES[m].lessons.length) l++;
-  else if(m+1<MODULES.length){m++;l=0}
-  else return;
+  else if(m+1<MODULES.length){m++;l=0} else return;
   cur={m,l};renderSide();renderLesson();
 }
 
 renderSide();renderLesson();updateProg();
+// run calc once if first lesson were calc (not here, but safe)
 </script>
 </body>
 </html>
