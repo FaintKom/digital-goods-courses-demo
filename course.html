@@ -66,6 +66,21 @@
   .placeholder{background:var(--card);border:1px dashed var(--line);border-radius:12px;
     padding:40px;text-align:center;color:var(--muted)}
 
+  /* showcase content-type blocks */
+  .sectag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+    color:var(--accent);background:var(--card2);border:1px solid var(--line);padding:3px 10px;border-radius:5px;margin:32px 0 12px}
+  .callout{background:rgba(255,122,24,.08);border:1px solid rgba(255,122,24,.3);border-radius:12px;padding:16px 18px;margin:6px 0}
+  .callout b{color:var(--accent)}
+  .diagram{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:6px 0}
+  .vcard{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:6px 0;cursor:pointer}
+  .vcard .play{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .vcard .play:after{content:"";border-left:14px solid #111;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+  .vcard b{display:block;font-size:14px}.vcard span{font-size:13px;color:var(--muted)}
+  .dl{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:6px 0}
+  .dl .ico{font-size:26px}.dl b{display:block;font-size:14px}.dl span{font-size:13px;color:var(--muted)}
+  .dlbtn{margin-left:auto;background:var(--card2);border:1px solid var(--line);color:var(--txt);font:inherit;font-weight:600;padding:9px 16px;border-radius:8px;cursor:pointer}
+  .dlbtn:hover{border-color:var(--accent)}
+
   /* inline проверка (theory) */
   .check{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:22px 0}
   .check .ctag{font-size:11px;font-weight:700;color:var(--accent2);letter-spacing:.5px;text-transform:uppercase}
@@ -171,7 +186,7 @@
 // types: theory | sim | workshop. sim: 'botfather' | 'panel'.
 const MODULES = [
   { t:"Рынок и модели продаж", lessons:[
-      {t:"Что продаём и кто покупает", type:"theory", full:true, example:true},
+      {t:"Урок 1: Что продаём и кто покупает", type:"theory", full:true, example:true, taskDemo:"botfather", showcase:true},
       {t:"Воркшоп: разбор ниш с создателями", type:"workshop", full:true} ]},
   { t:"Первая продажа руками", lessons:[
       {t:"Регистрация и пополнение баланса", type:"theory", full:true},
@@ -198,6 +213,11 @@ const MODULES = [
 
 const CONTENT = {
   "0.0":`
+    <p style="color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px">
+      Это первый урок-витрина: он специально собран из <b>всех типов контента</b>, которые будут в курсе.
+      Каждый блок подписан — так видно весь арсенал.</p>
+
+    <p class="sectag">📖 Теория</p>
     <p>Цифровые товары — это всё, что доставляется кодом, а не курьером: ключи активации игр,
        подарочные карты (Steam, PlayStation, Apple), пополнения внутриигровых валют, подписки, eSIM.
        Покупатель получает товар мгновенно, у продавца нет склада и логистики.</p>
@@ -207,15 +227,58 @@ const CONTENT = {
       <li><b>Опт дешевле розницы</b> — берёте по оптовой цене, продаёте по рыночной, разница ваша.</li>
       <li><b>Спрос круглый год</b> — игры, подписки и пополнения покупают постоянно.</li>
     </ul>
-    <h2>Как устроен заработок</h2>
-    <p>Оптовый поставщик даёт товар ниже рынка → вы ставите свою цену → маржа ваша.
-       На обороте добавляется кэшбэк-уровень поставщика, и маржа растёт.</p>
+
+    <p class="sectag">🖼 Визуальная схема</p>
+    <div class="diagram">
+      <svg viewBox="0 0 620 120" width="100%" style="max-width:560px;display:block;margin:0 auto" font-family="sans-serif">
+        <rect x="6" y="30" width="170" height="58" rx="10" fill="#1d212b" stroke="#2a2f3a"/>
+        <text x="91" y="55" fill="#e8eaed" font-size="14" font-weight="700" text-anchor="middle">Поставщик</text>
+        <text x="91" y="74" fill="#9aa3b2" font-size="13" text-anchor="middle">опт: 800 ₽</text>
+        <rect x="225" y="30" width="170" height="58" rx="10" fill="#1d212b" stroke="#ff7a18"/>
+        <text x="310" y="55" fill="#e8eaed" font-size="14" font-weight="700" text-anchor="middle">Вы</text>
+        <text x="310" y="74" fill="#9aa3b2" font-size="13" text-anchor="middle">цена: 1100 ₽</text>
+        <rect x="444" y="30" width="170" height="58" rx="10" fill="#1d212b" stroke="#2a2f3a"/>
+        <text x="529" y="55" fill="#e8eaed" font-size="14" font-weight="700" text-anchor="middle">Покупатель</text>
+        <text x="529" y="74" fill="#9aa3b2" font-size="13" text-anchor="middle">платит 1100 ₽</text>
+        <line x1="176" y1="59" x2="223" y2="59" stroke="#ff7a18" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="395" y1="59" x2="442" y2="59" stroke="#ff7a18" stroke-width="2" marker-end="url(#ar)"/>
+        <text x="310" y="108" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle">ваша маржа: 300 ₽</text>
+        <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#ff7a18"/></marker></defs>
+      </svg>
+    </div>
+
+    <p class="sectag">💡 Выноска</p>
+    <div class="callout"><b>Совет.</b> Не хватайтесь за весь каталог. Возьмите одну нишу (например, пополнения одной игры),
+      доведите до первой продажи — потом расширяйтесь. Так быстрее увидите результат и не утоните в товарах.</div>
+
+    <p class="sectag">🎥 Видео · запись разбора</p>
+    <div class="vcard" onclick="this.querySelector('span').textContent='Демо · запись откроется в платформе'">
+      <div class="play"></div>
+      <div><b>Запись вебинара: как выбрать нишу под себя</b><span>47 мин · из библиотеки воркшопов</span></div>
+    </div>
+
+    <p class="sectag">🔵 Интерактивный пример</p>
     {{EXAMPLE}}
+
+    <p class="sectag">✅ Проверка понимания</p>
     {{CHECK}}
+
+    <p class="sectag">🧩 Интерактивное задание</p>
+    {{TASK}}
+
+    <p class="sectag">📥 Шаблон для скачивания</p>
+    <div class="dl"><span class="ico">📄</span>
+      <div><b>Калькулятор юнит-экономики (.xlsx)</b><span>готовый шаблон, ученик считает свою маржу</span></div>
+      <button class="dlbtn" onclick="this.textContent='Демо ✓'">Скачать</button>
+    </div>
+
+    <p class="sectag">🎯 Практика-чекпоинт</p>
     <div class="task">
-      <h3>Практика урока</h3>
+      <h3>Задание урока</h3>
       <p>1. Зарегистрируйтесь на платформе-поставщике (ссылка в материалах).</p>
       <p>2. Найдите 3 товара и сравните оптовую цену с ценой на маркетплейсе.</p>
+      <p>3. Отметьте урок пройденным — шаг засчитается в дашборде (= активация).</p>
     </div>`,
   "1.0":`
     <p>Делаем первый реальный шаг внутри платформы: создаём аккаунт и пополняем баланс,
@@ -292,7 +355,8 @@ function renderLesson(){
   document.getElementById('crumbs').textContent=`Модуль ${cur.m+1} · ${mod.t}`;
   document.getElementById('lessonTitle').textContent=les.t;
   const bm={theory:['b-theory','📖 Теория'],sim:['b-inter','🧩 Интерактивное задание'],workshop:['b-work','🎥 Воркшоп']}[les.type];
-  document.getElementById('badge').innerHTML=`<span class="badge ${bm[0]}">${bm[1]}</span>`;
+  const lbl = les.showcase ? '📚 Урок 1 · все типы контента' : bm[1];
+  document.getElementById('badge').innerHTML=`<span class="badge ${bm[0]}">${lbl}</span>`;
 
   const body=document.getElementById('lessonBody');
   if(les.type==="workshop"){ body.innerHTML=workshopHTML(); }
@@ -303,9 +367,11 @@ function renderLesson(){
     if(c){
       c=c.replace('{{EXAMPLE}}', les.example?exampleHTML():'');
       c=c.replace('{{CHECK}}', CHECK);
+      c=c.replace('{{TASK}}', les.taskDemo==='botfather'?botfatherHTML():'');
       if(les.calc) c+=calcHTML();
       body.innerHTML=c;
       if(les.example) exampleRun();
+      if(les.taskDemo==='botfather') bfStart();
       if(les.calc) calcRun();
     } else {
       body.innerHTML=`<div class="placeholder">Демонстрационная версия. Конспект и материалы этого урока
